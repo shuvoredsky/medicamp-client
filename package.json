@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "antd": "^5.26.4",
     "dotenv": "^17.0.1",
     "firebase": "^11.10.0",
     "lottie-react": "^2.4.1",
@@ -27,7 +28,6 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
-    "daisyui": "^5.0.46",
     "eslint": "^9.29.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",

@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="bg-base-200 text-base-content">
+    <footer className="bg-white">
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col items-center text-center space-y-10">
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 text-center md:text-left">
           <div className="lg:ml-40">
@@ -22,14 +22,14 @@ const Footer = () => {
 
           <div>
             <h3 className="text-lg font-semibold mb-4 text-primary">
-              About WhereIsIt
+              About MediCamp Connect
             </h3>
             <p className="text-sm leading-relaxed mb-3">
               WhereIsIt helps you reunite with lost items and connect with
               honest finders. A community built on trust and kindness. ❤️
             </p>
             <p className="text-sm hover:text-secondary cursor-pointer">
-              📧 support@whereIsIt.com
+              📧 support@medicampconnect.com
             </p>
             <p className="text-sm">📞 +880 1234 567890</p>
           </div>
@@ -53,7 +53,8 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-base-content/20 w-full pt-6 text-sm text-neutral">
-          © {new Date().getFullYear()} WhereIsIt Community. All rights reserved.
+          © {new Date().getFullYear()} MediCamp Connect Community. All rights
+          reserved.
         </div>
       </div>
     </footer>

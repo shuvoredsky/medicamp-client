@@ -6,19 +6,22 @@ import img3 from "../../assets/img3.jpg";
 const images = [img1, img2, img3];
 const sliderTexts = [
   {
-    title: "Empowering Communities Through Health",
-    subtitle: "Organize and join medical camps with ease.",
-    caption: "A healthier community starts with one medical camp at a time.",
+    title: "Thousands Treated, Lives Changed",
+    subtitle:
+      "Our medical camps have brought healthcare to remote communities.",
+    caption: "Over 5,000 patients served across 50+ successful camps.",
   },
   {
-    title: "Your Health, Our Mission",
-    subtitle: "Access affordable healthcare through our medical camps.",
-    caption: "Bringing medical services closer to those who need them most.",
+    title: "A Step Toward Healthier Futures",
+    subtitle:
+      "From basic checkups to life-saving treatments, we made a difference.",
+    caption: "Smiles returned. Wounds healed. Hope restored.",
   },
   {
-    title: "Connecting Participants and Professionals",
-    subtitle: "Streamlined management for every camp.",
-    caption: "Efficiently coordinate camps and improve public health outcomes.",
+    title: "Together, We Care",
+    subtitle:
+      "Volunteers, doctors, and participants united for a healthier tomorrow.",
+    caption: "Every camp is a story of compassion and impact.",
   },
 ];
 

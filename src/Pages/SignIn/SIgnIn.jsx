@@ -6,6 +6,9 @@ import { auth } from "../../firebase/firebase-init";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet-async";
+import { Form, Input, Button, Typography, Card } from "antd";
+
+const { Title, Text } = Typography;
 
 const SignIn = () => {
   const [error, setError] = useState("");
@@ -14,11 +17,8 @@ const SignIn = () => {
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
+  const handleLogin = (values) => {
+    const { email, password } = values;
 
     signIn(email, password)
       .then(() => {
@@ -31,12 +31,13 @@ const SignIn = () => {
   };
 
   const handleForgetPass = () => {
-    const email = emailRef.current.value.trim();
+    const email = emailRef.current.input.value.trim();
     setErrorMsg("");
     if (!email) {
       setErrorMsg("Please enter your email address first.");
       return;
     }
+
     sendPasswordResetEmail(auth, email)
       .then(() => {
         toast.success("A password reset email has been sent!");
@@ -47,76 +48,62 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-[#f0f2f5]">
       <Helmet>
-        <title>WhereIsIt | Login</title>
+        <title>MCMS | Login</title>
       </Helmet>
 
-      <div className="bg-base-100 text-base-content border border-base-300 shadow-xl rounded-xl p-8 w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-center mb-6">
+      <Card className="w-full max-w-sm shadow-lg" bordered>
+        <Title level={3} style={{ textAlign: "center" }}>
           Login to Your Account
-        </h2>
+        </Title>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block mb-1 font-semibold">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              ref={emailRef}
-              type="email"
-              placeholder="Email"
-              className="input input-bordered w-full bg-base-100"
-              required
-              autoComplete="email"
-            />
-          </div>
+        <Form layout="vertical" onFinish={handleLogin}>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email!" },
+              { type: "email", message: "Enter a valid email!" },
+            ]}
+          >
+            <Input ref={emailRef} placeholder="Enter your email" />
+          </Form.Item>
 
-          <div>
-            <label htmlFor="password" className="block mb-1 font-semibold">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Password"
-              className="input input-bordered w-full bg-base-100"
-              required
-              autoComplete="current-password"
-            />
-          </div>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <Input.Password placeholder="Enter your password" />
+          </Form.Item>
 
-          <div className="text-sm text-right">
-            <button
-              type="button"
-              onClick={handleForgetPass}
-              className="text-primary hover:underline focus:outline-none"
-            >
+          <div className="text-right mb-2">
+            <Button type="link" onClick={handleForgetPass}>
               Forgot password?
-            </button>
+            </Button>
           </div>
 
           {(error || errorMsg) && (
-            <p className="text-error text-xs text-center">
+            <Text type="danger" className="block text-center mb-2">
               {error || errorMsg}
-            </p>
+            </Text>
           )}
 
-          <button type="submit" className="btn btn-primary w-full">
-            Login
-          </button>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Login
+            </Button>
+          </Form.Item>
 
-          <p className="text-center text-sm mt-4">
+          <Text type="secondary" className="block text-center">
             Don’t have an account?{" "}
-            <Link to="/sign-up" className="text-secondary hover:underline">
-              Register
+            <Link to="/sign-up">
+              <Button type="link">Register</Button>
             </Link>
-          </p>
-        </form>
-      </div>
+          </Text>
+        </Form>
+      </Card>
 
       <ToastContainer autoClose={3000} position="top-right" theme="colored" />
     </div>
