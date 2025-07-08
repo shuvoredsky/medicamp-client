@@ -4,6 +4,8 @@ import SignIn from "../Pages/SignIn/SIgnIn.jsx";
 import SignUp from "../Pages/SIgnUp/SignUp.jsx";
 import ErrorPage from "../Pages/ErroPage/ErrorPage.jsx";
 import RootLayout from "../RootLayout/RootLayout.jsx";
+import Dashboard from "../Dashboard/Dashboard.jsx";
+import AddCamp from "../Dashboard/AddCamp.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +25,16 @@ export const router = createBrowserRouter([
       {
         path: "/sign-up",
         Component: SignUp,
+      },
+      {
+        path: "/dashboard",
+        Component: Dashboard,
+        children: [
+          {
+            path: "add-camp",
+            Component: AddCamp,
+          },
+        ],
       },
     ],
   },
