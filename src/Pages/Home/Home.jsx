@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import Slider from "../../Components/Slider.jsx/Slider";
+import CampSection from "../../Components/CampCardSection/CampSection";
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       </Helmet>
       {/* <LostFoundSlider /> */}
       <Slider></Slider>
+      <CampSection></CampSection>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, Outlet } from "react-router";
+import AddCamp from "./AddCamp";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -20,7 +21,7 @@ const Dashboard = () => {
           <h2 className="text-xl font-bold text-blue-600">Dashboard</h2>
           <nav className="space-y-2">
             <Link
-              to="dashboard/add-camp"
+              to="add-camp"
               className="block font-medium text-black hover:text-blue-600"
             >
               Add Medical Camp
@@ -72,37 +73,11 @@ const Dashboard = () => {
       </div>
 
       {/* Main content */}
+
       <main className="flex-1 sm:ml-64 p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <div className="h-24 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Widget
-          </div>
-          <div className="h-24 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Widget
-          </div>
-          <div className="h-24 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Widget
-          </div>
-        </div>
-
-        <div className="h-48 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl mb-4">
-          + Chart or Summary
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="h-28 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Data
-          </div>
-          <div className="h-28 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Data
-          </div>
-          <div className="h-28 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Data
-          </div>
-          <div className="h-28 bg-gray-100 rounded-md flex justify-center items-center text-gray-500 text-xl">
-            + Data
-          </div>
-        </div>
+        <Outlet>
+          <AddCamp></AddCamp>
+        </Outlet>
       </main>
     </div>
   );
