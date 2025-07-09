@@ -43,10 +43,6 @@ const CampSection = () => {
               src={camp.image}
               alt={camp.campName}
               className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
-              onError={(e) => {
-                e.target.src =
-                  "https://via.placeholder.com/400x250?text=No+Image";
-              }}
             />
             <div className="p-4 space-y-1 text-sm">
               <h3 className="text-base font-bold text-blue-600">
