@@ -7,6 +7,7 @@ import RootLayout from "../RootLayout/RootLayout.jsx";
 import Dashboard from "../Dashboard/Dashboard.jsx";
 import AddCamp from "../Dashboard/AddCamp.jsx";
 import AvailableCamps from "../Pages/Available-Camp/AvailableCamps.jsx";
+import CampDetails from "../Pages/CampDetails/CampDetails.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "/available-camps",
         Component: AvailableCamps,
+      },
+      {
+        path: "/camp-details/:id",
+        Component: CampDetails,
       },
       {
         path: "dashboard",
