@@ -40,6 +40,7 @@ const CampDetails = () => {
     mutation.mutate({
       ...formData,
       campId: camp._id,
+      organizerEmail: camp.organizerEmail,
     });
   };
 

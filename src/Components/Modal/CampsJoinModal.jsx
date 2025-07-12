@@ -50,6 +50,16 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
     if (paymentIntent.status === "succeeded") {
       setError("");
       Swal.fire("Payment Successful", "You have joined the camp!", "success");
+      // Send data to camps-join endpoint with organizerEmail and confirmationStatus
+      await axiosSecure.post("/camps-join", {
+        ...formData,
+        status: "paid",
+        campId: camp?._id,
+        organizerEmail: camp?.organizerEmail,
+        confirmationStatus: "Pending",
+      });
+      // Update participant count
+      await axiosSecure.patch(`/camps-update-count/${camp?._id}`);
       onSubmit({ ...formData, status: "paid" });
       reset();
       onClose();

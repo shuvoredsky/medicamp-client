@@ -1,10 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { use } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const AddCamp = () => {
+  const { user } = use(AuthContext);
+  console.log(user);
   const {
     register,
     handleSubmit,
@@ -33,6 +36,8 @@ const AddCamp = () => {
       campName: data.campName,
       image: data.image,
       fees: parseFloat(data.fees),
+      organizerName: user.displayName,
+      organizerEmail: user.email,
       dateTime: data.dateTime,
       location: data.location,
       doctorName: data.doctorName,
