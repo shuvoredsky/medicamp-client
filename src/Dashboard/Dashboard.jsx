@@ -79,7 +79,7 @@ const Dashboard = () => {
                   Analytics
                 </Link>
                 <Link
-                  to="participant-profile"
+                  to="profile"
                   className="block font-medium text-black hover:text-blue-600"
                 >
                   Participant Profile
