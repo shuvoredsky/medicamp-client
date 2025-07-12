@@ -8,6 +8,8 @@ import Dashboard from "../Dashboard/Dashboard.jsx";
 import AddCamp from "../Dashboard/AddCamp.jsx";
 import AvailableCamps from "../Pages/Available-Camp/AvailableCamps.jsx";
 import CampDetails from "../Pages/CampDetails/CampDetails.jsx";
+import ManageCamps from "../Dashboard/ManageCamps.jsx";
+import UpdateCamp from "../Dashboard/UpdateCamp.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ export const router = createBrowserRouter([
           {
             path: "add-camp",
             Component: AddCamp,
+          },
+          {
+            path: "manage-camps",
+            Component: ManageCamps,
+          },
+          {
+            path: "update-camp/:campId",
+            Component: UpdateCamp,
           },
         ],
       },

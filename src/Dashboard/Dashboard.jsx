@@ -13,37 +13,39 @@ const Dashboard = () => {
     <div className="min-h-screen bg-white flex flex-col sm:flex-row">
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 w-64 h-fit bg-red-300 lg:mt-15 shadow-md transform ${
+        className={`fixed top-0 left-0 z-40 w-64 h-full bg-red-100 shadow-md transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 sm:translate-x-0`}
+        } transition-transform duration-300 sm:translate-x-0 sm:relative sm:h-auto sm:z-0`}
+        // className={`fixed top-0 left-0 z-40 w-64 h-full bg-slate-100 lg:mt-15 shadow-md transform ${
+        //   isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        // } transition-transform duration-300 sm:translate-x-0 sm:relative sm:h-auto sm:z-0`}
       >
         <div className="h-full px-4 py-6 space-y-4">
           <h2 className="text-xl font-bold text-blue-600">Dashboard</h2>
           <nav className="space-y-2">
+            <a
+              href="#"
+              className="block font-medium text-black hover:text-blue-600"
+            >
+              Organizer Profile.
+            </a>
             <Link
               to="add-camp"
               className="block font-medium text-black hover:text-blue-600"
             >
-              Add Medical Camp
+              Add A Camp
             </Link>
-
-            <a
-              href="#"
+            <Link
+              to="manage-camps"
               className="block font-medium text-black hover:text-blue-600"
             >
-              My Camps
-            </a>
+              Manage Camps
+            </Link>
             <a
-              href="#"
+              href="/"
               className="block font-medium text-black hover:text-blue-600"
             >
-              Manage Users
-            </a>
-            <a
-              href="#"
-              className="block font-medium text-black hover:text-blue-600"
-            >
-              Back to Home
+              Manage Registered Camps
             </a>
           </nav>
         </div>
