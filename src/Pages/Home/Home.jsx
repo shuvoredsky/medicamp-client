@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import Slider from "../../Components/Slider.jsx/Slider";
 import CampSection from "../../Components/CampCardSection/CampSection";
+import FeedBacksSection from "../../Components/FeedBacksSection/FeedBacksSection";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       {/* <LostFoundSlider /> */}
       <Slider></Slider>
       <CampSection></CampSection>
+      <FeedBacksSection></FeedBacksSection>
     </div>
   );
 };

@@ -51,7 +51,7 @@ const Navbar = () => {
         className="cursor-pointer text-xl font-bold text-blue-600"
         onClick={() => navigate("/")}
       >
-        MediCamp Connect
+        MediCamp
       </div>
 
       {/* Nav Links */}

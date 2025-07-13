@@ -9,6 +9,7 @@ import { useForm, Controller } from "react-hook-form";
 
 const RegisteredCamps = () => {
   const { user } = useContext(AuthContext);
+
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const stripe = useStripe();
@@ -70,7 +71,7 @@ const RegisteredCamps = () => {
     mutationFn: async (data) => {
       const res = await axiosSecure.post("/submit-feedback", {
         campId: selectedCamp._id,
-        participantEmail: user?.email,
+        participantEmail: user?.displayName,
         ...data,
       });
       return res.data;
