@@ -2,71 +2,38 @@ import React, { useState } from "react";
 import { Modal, Input, Select } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import Swal from "sweetalert2";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const { Option } = Select;
 
 const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
   const { control, handleSubmit, reset } = useForm();
-  const stripe = useStripe();
-  const elements = useElements();
   const axiosSecure = useAxiosSecure();
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleOk = async (formData) => {
     setLoading(true);
-    const { data } = await axiosSecure.post("/create-payment-intent", {
-      amount: camp?.fees * 100, // cents
-    });
-
-    const clientSecret = data.clientSecret;
-
-    const card = elements.getElement(CardElement);
-    if (!card || !stripe) {
-      setError("Stripe not loaded");
-      setLoading(false);
-      return;
-    }
-
-    const { paymentIntent, error: stripeError } =
-      await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card,
-          billing_details: {
-            name: user?.displayName || "Unknown",
-            email: user?.email || "Unknown",
-          },
-        },
-      });
-
-    if (stripeError) {
-      setError(stripeError.message);
-      setLoading(false);
-      return;
-    }
-
-    if (paymentIntent.status === "succeeded") {
-      setError("");
-      Swal.fire("Payment Successful", "You have joined the camp!", "success");
-      // Send data to camps-join endpoint with organizerEmail and confirmationStatus
+    try {
       await axiosSecure.post("/camps-join", {
         ...formData,
-        status: "paid",
+        status: "unpaid",
         campId: camp?._id,
         organizerEmail: camp?.organizerEmail,
         confirmationStatus: "Pending",
       });
-      // Update participant count
       await axiosSecure.patch(`/camps-update-count/${camp?._id}`);
-      onSubmit({ ...formData, status: "paid" });
+      Swal.fire(
+        "Success",
+        "Registration successful! Please pay to confirm.",
+        "success"
+      );
+      onSubmit({ ...formData, status: "unpaid" });
       reset();
       onClose();
-    } else {
-      Swal.fire("Payment Failed", "Try again later", "error");
+    } catch (error) {
+      Swal.fire("Error", "Registration failed", "error");
+      console.log(error);
     }
-
     setLoading(false);
   };
 
@@ -80,7 +47,6 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
       okButtonProps={{ disabled: loading }}
     >
       <form className="space-y-3">
-        {/* Read-only fields */}
         <Controller
           name="campName"
           control={control}
@@ -105,8 +71,6 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
           defaultValue={camp?.doctorName}
           render={({ field }) => <Input {...field} disabled />}
         />
-
-        {/* Participant Info */}
         <Controller
           name="participantName"
           control={control}
@@ -159,12 +123,6 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
             <Input {...field} placeholder="Emergency Contact" type="number" />
           )}
         />
-
-        {/* Stripe Payment Card Input */}
-        <div className="p-2 border rounded-md">
-          <CardElement />
-        </div>
-        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
     </Modal>
   );

@@ -12,27 +12,37 @@ const ParticipantProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
-    data: participant = {},
+    data: profile = {},
     isLoading,
     error,
   } = useQuery({
     queryKey: ["participant-profile", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/participant-profile?email=${user?.email}`
-      );
-      console.log("Participant Data:", res.data); // Debug
-      return res.data;
+      try {
+        const res = await axiosSecure.get(
+          `/participant-profile?email=${user?.email}`
+        );
+        console.log("Profile Data:", res.data);
+        return res.data || {};
+      } catch (err) {
+        console.error("Query Error:", err.response?.data || err.message);
+        throw err;
+      }
     },
     enabled: !!user?.email,
+    onError: (err) => {
+      console.error(
+        "Query Failed:",
+        err.message,
+        err.response?.status,
+        err.response?.data
+      );
+    },
   });
 
   const mutation = useMutation({
     mutationFn: async (updatedData) => {
-      const res = await axiosSecure.patch(
-        `/update-participant/${participant._id}`,
-        updatedData
-      );
+      const res = await axiosSecure.patch("/update-profile", updatedData);
       return res.data;
     },
     onSuccess: () => {
@@ -46,32 +56,37 @@ const ParticipantProfile = () => {
   });
 
   const handleFinish = (values) => {
-    mutation.mutate(values);
+    mutation.mutate({ email: user?.email, ...values });
   };
 
   if (isLoading) return <p className="text-center py-10">Loading...</p>;
-  if (error)
+  if (error && error.response?.status === 404) {
+    return (
+      <p className="text-center py-10 text-red-500">
+        User not found. Please contact admin.
+      </p>
+    );
+  }
+  if (error) {
     return (
       <p className="text-center py-10 text-red-500">Error: {error.message}</p>
     );
+  }
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
       <Card className="max-w-full md:max-w-md lg:max-w-lg mx-auto shadow-lg rounded-lg">
         <div className="flex flex-col items-center space-y-4 p-4">
           <Avatar
-            src={participant?.image || user?.photoURL || "/default-avatar.png"}
+            src={profile?.photoURL || user?.photoURL || "/default-avatar.png"}
             size={{ xs: 60, sm: 80, md: 100 }}
             className="mb-2"
           />
           <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-800">
-            {participant?.participantName || "No Name"}
+            {profile?.name || "No Name"}
           </h2>
           <p className="text-sm md:text-base text-gray-600">
-            {participant?.email || "No Email"}
-          </p>
-          <p className="text-sm md:text-base text-gray-600">
-            Phone: {participant?.phone || "Not Provided"}
+            Contact: {profile?.contact || "Not Provided"}
           </p>
           <Button
             type="primary"
@@ -94,31 +109,33 @@ const ParticipantProfile = () => {
         <Form
           layout="vertical"
           initialValues={{
-            participantName: participant?.participantName || "",
-            image: participant?.image || "",
-            phone: participant?.phone || "",
+            name: profile?.name || "",
+            photoURL: profile?.photoURL || "",
+            contact: profile?.contact || "",
           }}
           onFinish={handleFinish}
           className="p-4"
         >
           <Form.Item
-            name="participantName"
+            name="name"
             label="Full Name"
             rules={[{ required: true, message: "Please enter your name" }]}
           >
             <Input placeholder="Enter your name" />
           </Form.Item>
-          <Form.Item name="image" label="Photo URL">
+          <Form.Item
+            name="photoURL"
+            label="Photo URL"
+            rules={[{ required: true, message: "Please enter photo URL" }]}
+          >
             <Input placeholder="Enter your photo URL" />
           </Form.Item>
           <Form.Item
-            name="phone"
-            label="Phone"
-            rules={[
-              { required: true, message: "Please enter your phone number" },
-            ]}
+            name="contact"
+            label="Contact"
+            rules={[{ required: true, message: "Please enter contact" }]}
           >
-            <Input placeholder="Enter your phone number" />
+            <Input placeholder="Enter your contact" />
           </Form.Item>
           <Form.Item>
             <Button
@@ -128,7 +145,7 @@ const ParticipantProfile = () => {
               loading={mutation.isPending}
               className="mt-4"
             >
-              Save Changes
+              Update
             </Button>
           </Form.Item>
         </Form>
