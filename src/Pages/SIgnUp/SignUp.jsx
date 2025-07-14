@@ -105,7 +105,7 @@ const SignUp = () => {
 
             addUserToDB.mutate(userInfo);
 
-            navigate("/sign-in");
+            navigate("/");
           })
           .catch(() => {
             toast.warn("User updated partially!");
