@@ -9,6 +9,7 @@ import {
   Card,
   Row,
   Col,
+  Spin,
 } from "antd";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,6 +31,7 @@ const RegisteredCamps = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [selectedCamp, setSelectedCamp] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     data: registeredCamps = [],
@@ -175,53 +177,135 @@ const RegisteredCamps = () => {
     submitFeedbackMutation.mutate(formData);
   };
 
+  // Filter camps based on search term
+  const filteredCamps = registeredCamps.filter(
+    (camp) =>
+      camp.campName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      camp.status?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const tableColumns = [
+    {
+      title: "Camp Name",
+      dataIndex: "campName",
+      key: "campName",
+    },
+    {
+      title: "Fees",
+      dataIndex: "fees",
+      key: "fees",
+      render: (text) => `৳${text}`,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Confirmation",
+      dataIndex: "confirmationStatus",
+      key: "confirmationStatus",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <div className="flex gap-2">
+          {record.status === "unpaid" ? (
+            <>
+              <Button type="primary" onClick={() => handlePay(record)}>
+                Pay
+              </Button>
+              <Button danger onClick={() => handleCancel(record)}>
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => handleFeedback(record)}>Feedback</Button>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6">
       <Title level={3} className="text-center mb-6">
         Registered Camps
       </Title>
 
+      {/* Search Bar */}
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search by Camp Name or Status (paid/unpaid)..."
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {isLoading ? (
-        <p className="text-center">Loading...</p>
+        <Spin size="large" className="text-center py-10" />
       ) : (
-        <Row gutter={[16, 16]}>
-          {registeredCamps.map((camp) => (
-            <Col xs={24} sm={12} lg={8} key={camp._id}>
-              <Card
-                title={camp.campName}
-                bordered
-                className="h-full"
-                extra={<span className="font-semibold">৳{camp.fees}</span>}
-              >
-                <p className="mb-1">
-                  <strong>Participant:</strong> {camp.participantName}
-                </p>
-                <p className="mb-1">
-                  <strong>Status:</strong> {camp.status}
-                </p>
-                <p className="mb-3">
-                  <strong>Confirmation:</strong> {camp.confirmationStatus}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {camp.status === "unpaid" ? (
-                    <>
-                      <Button type="primary" onClick={() => handlePay(camp)}>
-                        Pay
-                      </Button>
-                      <Button danger onClick={() => handleCancel(camp)}>
-                        Cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <Button onClick={() => handleFeedback(camp)}>
-                      Feedback
-                    </Button>
-                  )}
-                </div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+        <>
+          {/* Tablet and Large Devices: Table */}
+          <div className="hidden sm:block">
+            <Table
+              dataSource={filteredCamps}
+              columns={tableColumns}
+              rowKey={(record) => record._id || Math.random()}
+              pagination={{ pageSize: 10 }}
+              className="shadow-lg rounded-lg"
+              scroll={{ x: true }}
+            />
+          </div>
+
+          {/* Mobile Devices: Cards */}
+          <div className="sm:hidden">
+            <Row gutter={[16, 16]}>
+              {filteredCamps.map((camp) => (
+                <Col xs={24} key={camp._id}>
+                  <Card
+                    title={camp.campName}
+                    bordered
+                    className="h-full"
+                    extra={<span className="font-semibold">৳{camp.fees}</span>}
+                  >
+                    <p className="mb-1">
+                      <strong>Participant:</strong> {camp.participantName}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Status:</strong> {camp.status}
+                    </p>
+                    <p className="mb-3">
+                      <strong>Confirmation:</strong> {camp.confirmationStatus}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {camp.status === "unpaid" ? (
+                        <>
+                          <Button
+                            type="primary"
+                            onClick={() => handlePay(camp)}
+                          >
+                            Pay
+                          </Button>
+                          <Button danger onClick={() => handleCancel(camp)}>
+                            Cancel
+                          </Button>
+                        </>
+                      ) : (
+                        <Button onClick={() => handleFeedback(camp)}>
+                          Feedback
+                        </Button>
+                      )}
+                    </div>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </>
       )}
 
       <Modal

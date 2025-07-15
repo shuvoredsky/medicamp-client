@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Table, Tag, Button, Modal, Card, Grid } from "antd";
+import { Table, Tag, Button, Modal, Card, Grid, Input } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { AuthContext } from "../Provider/AuthProvider";
@@ -14,6 +14,7 @@ const ManageRegisteredCamps = () => {
   const queryClient = useQueryClient();
   const screens = useBreakpoint();
   const isMobile = !screens.md;
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     data: registered = [],
@@ -61,6 +62,16 @@ const ManageRegisteredCamps = () => {
     }
   };
 
+  // Filter registered camps based on search term
+  const filteredRegistered = registered.filter(
+    (record) =>
+      record.campName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      record.participantName
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      String(record.fees)?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (isLoading) return <p className="text-center py-10">Loading...</p>;
   if (error)
     return (
@@ -70,7 +81,7 @@ const ManageRegisteredCamps = () => {
   // Mobile Card View
   const renderMobileCards = () => (
     <div className="space-y-4">
-      {registered.map((record) => (
+      {filteredRegistered.map((record) => (
         <Card
           key={record._id}
           className="shadow-md"
@@ -130,10 +141,10 @@ const ManageRegisteredCamps = () => {
     </div>
   );
 
-  // Desktop Table View
+  // Desktop/Tablets Table View
   const renderDesktopTable = () => (
     <Table
-      dataSource={registered}
+      dataSource={filteredRegistered}
       columns={[
         { title: "Camp Name", dataIndex: "campName", key: "campName" },
         {
@@ -199,15 +210,29 @@ const ManageRegisteredCamps = () => {
       ]}
       rowKey={(record) => record._id}
       bordered
-      pagination={{ pageSize: 6 }}
+      pagination={{ pageSize: 10 }}
+      scroll={{ x: true }}
+      className="shadow-lg rounded-lg"
     />
   );
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-7xl mx-auto">
       <h2 className="text-xl font-bold text-blue-600 mb-4">
         Manage Registered Camps
       </h2>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <Input
+          type="text"
+          placeholder="Search by Camp Name, Participant, or Fees..."
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {isMobile ? renderMobileCards() : renderDesktopTable()}
       <Modal
         title="Confirm Cancellation"

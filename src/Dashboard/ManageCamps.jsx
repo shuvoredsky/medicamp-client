@@ -1,5 +1,5 @@
-import React from "react";
-import { Table, Button, Popconfirm, message } from "antd";
+import React, { useState } from "react";
+import { Table, Button, Popconfirm, message, Input } from "antd";
 import { Link } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
@@ -7,6 +7,7 @@ import useAxiosSecure from "../Hooks/useAxiosSecure";
 const ManageCamps = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [searchTerm, setSearchTerm] = useState("");
 
   // ✅ Fetch camps using TanStack Query
   const { data: camps = [], isLoading } = useQuery({
@@ -30,6 +31,15 @@ const ManageCamps = () => {
       message.error("Failed to delete the camp.");
     },
   });
+
+  // ✅ Filter camps based on search term
+  const filteredCamps = camps.filter(
+    (camp) =>
+      camp.campName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      camp.doctorName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      camp.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      camp.dateTime?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // ✅ Table Columns
   const columns = [
@@ -87,18 +97,31 @@ const ManageCamps = () => {
   if (isLoading) return <p className="text-center py-10">Loading...</p>;
 
   return (
-    <div className="p-4 sm:p-6 md:p-10">
+    <div className="p-4 sm:p-6 md:p-10 max-w-7xl mx-auto">
       <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-blue-700 text-center sm:text-left">
         Manage Camps
       </h2>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <Input
+          type="text"
+          placeholder="Search by Camp Name, Doctor, Location, or Date..."
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <div className="overflow-x-auto">
         <Table
-          dataSource={camps}
+          dataSource={filteredCamps}
           columns={columns}
           rowKey={(record) => record._id}
           bordered
-          pagination={{ pageSize: 6 }}
+          pagination={{ pageSize: 10 }}
           scroll={{ x: "max-content" }}
+          className="shadow-lg rounded-lg"
         />
       </div>
     </div>
