@@ -18,26 +18,12 @@ const ParticipantProfile = () => {
   } = useQuery({
     queryKey: ["participant-profile", user?.email],
     queryFn: async () => {
-      try {
-        const res = await axiosSecure.get(
-          `/participant-profile?email=${user?.email}`
-        );
-        console.log("Profile Data:", res.data);
-        return res.data || {};
-      } catch (err) {
-        console.error("Query Error:", err.response?.data || err.message);
-        throw err;
-      }
+      const res = await axiosSecure.get(
+        `/participant-profile?email=${user?.email}`
+      );
+      return res.data || {};
     },
     enabled: !!user?.email,
-    onError: (err) => {
-      console.error(
-        "Query Failed:",
-        err.message,
-        err.response?.status,
-        err.response?.data
-      );
-    },
   });
 
   const mutation = useMutation({
@@ -59,7 +45,10 @@ const ParticipantProfile = () => {
     mutation.mutate({ email: user?.email, ...values });
   };
 
-  if (isLoading) return <p className="text-center py-10">Loading...</p>;
+  if (isLoading) {
+    return <p className="text-center py-10 text-base">Loading...</p>;
+  }
+
   if (error && error.response?.status === 404) {
     return (
       <p className="text-center py-10 text-red-500">
@@ -67,6 +56,7 @@ const ParticipantProfile = () => {
       </p>
     );
   }
+
   if (error) {
     return (
       <p className="text-center py-10 text-red-500">Error: {error.message}</p>
@@ -74,37 +64,42 @@ const ParticipantProfile = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8">
-      <Card className="max-w-full md:max-w-md lg:max-w-lg mx-auto shadow-lg rounded-lg">
-        <div className="flex flex-col items-center space-y-4 p-4">
-          <Avatar
-            src={profile?.photoURL || user?.photoURL || "/default-avatar.png"}
-            size={{ xs: 60, sm: 80, md: 100 }}
-            className="mb-2"
-          />
-          <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-800">
-            {profile?.name || "No Name"}
-          </h2>
-          <p className="text-sm md:text-base text-gray-600">
-            Contact: {profile?.contact || "Not Provided"}
-          </p>
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => setIsModalOpen(true)}
-            className="w-full md:w-auto"
-          >
-            Update Profile
-          </Button>
-        </div>
-      </Card>
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
+      <div className="max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto">
+        <Card className="shadow-md rounded-lg">
+          <div className="flex flex-col items-center gap-4 p-4 sm:flex-row sm:items-start sm:gap-6">
+            <Avatar
+              src={profile?.photoURL || user?.photoURL || "/default-avatar.png"}
+              size={100}
+              className="mx-auto"
+            />
+            <div className="text-center sm:text-left">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+                {profile?.name || "No Name"}
+              </h2>
+              <p className="text-sm text-gray-600">
+                Contact: {profile?.contact || "Not Provided"}
+              </p>
+              <Button
+                type="primary"
+                size="middle"
+                onClick={() => setIsModalOpen(true)}
+                className="mt-4 w-full sm:w-auto"
+              >
+                Update Profile
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       <Modal
         title="Update Profile"
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
-        className="md:max-w-md lg:max-w-lg mx-auto"
+        centered
+        width={500}
       >
         <Form
           layout="vertical"
@@ -114,7 +109,7 @@ const ParticipantProfile = () => {
             contact: profile?.contact || "",
           }}
           onFinish={handleFinish}
-          className="p-4"
+          className="p-1"
         >
           <Form.Item
             name="name"
@@ -141,9 +136,9 @@ const ParticipantProfile = () => {
             <Button
               type="primary"
               htmlType="submit"
-              block
               loading={mutation.isPending}
-              className="mt-4"
+              block
+              className="mt-2"
             >
               Update
             </Button>

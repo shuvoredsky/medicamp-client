@@ -37,12 +37,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header for all devices */}
-      <header className="bg-white shadow-md p-4 flex justify-between items-center z-50">
+      <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
         <button
           onClick={toggleSidebar}
           className="text-gray-600 md:hidden focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
+          aria-label="Toggle sidebar"
         >
           <svg
             className="w-6 h-6"
@@ -58,39 +59,47 @@ const Dashboard = () => {
             />
           </svg>
         </button>
+        <h1 className="text-xl font-bold text-blue-600">Dashboard</h1>
       </header>
 
-      {/* Sidebar */}
-      <div className="flex flex-1">
+      {/* Main content area with sidebar */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar - Mobile overlay */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+            onClick={toggleSidebar}
+          />
+        )}
+
+        {/* Sidebar */}
         <aside
-          className={`bg-blue-50 shadow-md transform transition-transform duration-300 ${
-            isSidebarOpen
-              ? "translate-x-0"
-              : "-translate-x-full md:translate-x-0"
-          } w-64 fixed md:static top-0 left-0 h-full z-40 md:z-0`}
+          className={`bg-blue-50 shadow-md transform transition-transform duration-300 ease-in-out ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0 w-64 fixed md:static top-0 left-0 h-full z-40 md:z-0`}
         >
           <div className="h-full px-4 py-6 space-y-4 overflow-y-auto">
-            <h2 className="text-xl font-bold text-blue-600 hidden md:block">
-              Dashboard
-            </h2>
             <nav className="space-y-2">
               {role === "organizer" && (
                 <>
                   <Link
                     to="add-camp"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Add A Camp
                   </Link>
                   <Link
                     to="manage-camps"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Manage Camps
                   </Link>
                   <Link
                     to="manage-registered-camps"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Manage Registered Camps
                   </Link>
@@ -101,25 +110,29 @@ const Dashboard = () => {
                 <>
                   <Link
                     to="analytics"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Analytics
                   </Link>
                   <Link
                     to="profile"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Participant Profile
                   </Link>
                   <Link
                     to="registered-camps"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Registered Camps
                   </Link>
                   <Link
                     to="payment-history"
-                    className="block font-medium text-black hover:text-blue-600 py-2"
+                    className="block font-medium text-black hover:text-blue-600 py-2 px-3 rounded hover:bg-blue-100 transition-colors"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     Payment History
                   </Link>
@@ -130,7 +143,7 @@ const Dashboard = () => {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 p-4 md:p-6">
+        <main className="flex-1 overflow-auto p-4 md:p-6 bg-white md:ml-0 mt-16 md:mt-0">
           <Outlet />
         </main>
       </div>
