@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="bg-base-200 text-base-content min-h-screen">
       <Helmet>
-        <title>WhereIsIt | Home</title>
+        <title>Medicamp | Home</title>
       </Helmet>
       {/* <LostFoundSlider /> */}
       <Slider></Slider>

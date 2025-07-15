@@ -120,7 +120,7 @@ const SignUp = () => {
   return (
     <div className="flex items-center justify-center px-4 my-5">
       <Helmet>
-        <title>MCMS | Register</title>
+        <title>MediCamp | Register</title>
       </Helmet>
       <ToastContainer />
 

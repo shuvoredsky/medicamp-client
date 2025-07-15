@@ -39,7 +39,7 @@ const SignIn = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5] px-4">
       <Helmet>
-        <title>MCMS | Login</title>
+        <title>Medicamp | Login</title>
       </Helmet>
 
       <Card className="w-full max-w-sm shadow-lg" bordered>
