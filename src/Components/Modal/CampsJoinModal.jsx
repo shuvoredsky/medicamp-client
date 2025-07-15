@@ -1,17 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Input, Select } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useUserRole from "../../Hooks/useUserRole";
 
 const { Option } = Select;
 
 const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit, reset, formState } = useForm();
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(false);
+  const { role } = useUserRole();
+  const [hasJoined, setHasJoined] = useState(false);
+
+  // Check if user has already joined this camp
+  useEffect(() => {
+    const checkJoinStatus = async () => {
+      if (user?.email && camp?._id) {
+        const res = await axiosSecure.get(
+          `/check-join-status?email=${user.email}&campId=${camp._id}`
+        );
+        setHasJoined(res.data.joined);
+      }
+    };
+    if (visible) checkJoinStatus();
+  }, [user?.email, camp?._id, visible, axiosSecure]);
 
   const handleOk = async (formData) => {
+    if (loading || hasJoined) return; // Prevent multiple clicks or if already joined
     setLoading(true);
     try {
       await axiosSecure.post("/camps-join", {
@@ -28,6 +45,7 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
         "success"
       );
       onSubmit({ ...formData, status: "unpaid" });
+      setHasJoined(true); // Update join status
       reset();
       onClose();
     } catch (error) {
@@ -44,7 +62,10 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
       onCancel={onClose}
       onOk={handleSubmit(handleOk)}
       okText={loading ? "Processing..." : "Join Now"}
-      okButtonProps={{ disabled: loading }}
+      okButtonProps={{
+        disabled: loading || hasJoined || role !== "user", // Disable if loading, already joined, or not a user
+        loading,
+      }}
     >
       <form className="space-y-3">
         <Controller
