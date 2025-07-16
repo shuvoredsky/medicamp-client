@@ -1,112 +1,128 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
+import { FcGoogle } from "react-icons/fc";
+import { FaStethoscope } from "react-icons/fa";
+import { toast } from "react-toastify";
 import useAuth from "../../Hooks/useAuth";
-import { Card, Input, Button, Typography } from "antd";
-import { Helmet } from "react-helmet-async";
+import { Form, Input, Button, Card, Typography } from "antd";
 
 const { Title, Text } = Typography;
 
 const SignIn = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const { signIn } = useAuth();
-  const location = useLocation();
+  const { signIn, signInWithGoogle, loading, user } = useAuth();
   const navigate = useNavigate();
-  const from = location.state?.from || "/";
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
+  if (user) return <Navigate to={from} replace={true} />;
 
-  const onSubmit = async (data) => {
-    const { email, password } = data;
+  // Handle form submit
+  const handleSubmit = async (values) => {
+    const { email, password } = values;
 
     try {
-      await signIn(email, password); // Call signIn function
-      navigate(from, { replace: true }); // Redirect on success
-    } catch (error) {
-      console.error("Login error:", error.message);
-      // Set custom error message for UI
-      if (error.message.includes("Invalid credentials")) {
-        errors.email = { message: "Invalid email or password" }; // Custom error for invalid credentials
-      } else {
-        errors.email = { message: error.message }; // General error
-      }
+      // User Login
+      const result = await signIn(email, password);
+
+      navigate(from, { replace: true });
+      toast.success("Login Successful");
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message || "Login failed");
+    }
+  };
+
+  // Handle Google Signin
+  const handleGoogleSignIn = async () => {
+    try {
+      // User Login using Google
+      const result = await signInWithGoogle();
+
+      navigate(from, { replace: true });
+      toast.success("Login Successful");
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message || "Google Login failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5] px-4">
-      <Helmet>
-        <title>Medicamp | Login</title>
-      </Helmet>
-
-      <Card className="w-full max-w-sm shadow-lg" bordered>
-        <Title level={3} style={{ textAlign: "center" }}>
-          Please Login
-        </Title>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Email Field */}
-          <div className="mb-4">
-            <label className="block mb-1">Email</label>
-            <Input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: "Please enter a valid email",
-                },
-              })}
-              placeholder="Enter your email"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          {/* Password Field */}
-          <div className="mb-4">
-            <label className="block mb-1">Password</label>
-            <Input.Password
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-              placeholder="Enter your password"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <div className="text-right mb-4">
-            <a className="text-sm text-blue-500 hover:underline" href="#">
-              Forgot password?
-            </a>
-          </div>
-
-          <Button type="primary" htmlType="submit" block>
-            Login
-          </Button>
-
-          <Text type="secondary" className="block text-center mt-3">
-            Don’t have an account?{" "}
-            <Link to="/sign-up">
-              <Button type="link" size="small">
-                Register
-              </Button>
-            </Link>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-blue-50">
+      <Card className="w-full max-w-md p-6 rounded-lg shadow-lg bg-white border border-blue-100">
+        <div className="mb-6 text-center">
+          <Title level={2} className="text-blue-700">
+            Medicamp Sign In
+          </Title>
+          <Text className="text-sm text-gray-600">
+            Access your medical account
           </Text>
-        </form>
+        </div>
+        <Form
+          name="login_form"
+          onFinish={handleSubmit}
+          layout="vertical"
+          className="space-y-6"
+          requiredMark={false}
+        >
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email!" },
+              { type: "email", message: "Please enter a valid email!" },
+            ]}
+          >
+            <Input
+              placeholder="Enter your email"
+              className="w-full py-2 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <Input.Password
+              placeholder="Enter your password"
+              className="w-full py-2 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              className="bg-blue-600 hover:bg-blue-700"
+              loading={loading}
+            >
+              {loading ? (
+                <FaStethoscope className="animate-pulse text-lg" />
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </Form.Item>
+        </Form>
+
+        <div className="flex items-center gap-2 my-4">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <Text className="text-sm text-gray-600">or continue with</Text>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
+        <Button
+          type="default"
+          block
+          icon={<FcGoogle size={20} />}
+          onClick={handleGoogleSignIn}
+          className="border-gray-300 hover:border-gray-400"
+        >
+          Continue with Google
+        </Button>
+        <Text className="text-center text-sm text-gray-600 mt-4 block">
+          Don’t have an account?{" "}
+          <Link to="/sign-up" className="text-blue-600 hover:underline">
+            Register
+          </Link>
+        </Text>
       </Card>
     </div>
   );

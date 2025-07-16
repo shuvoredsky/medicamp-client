@@ -1,86 +1,96 @@
+import { createContext, useEffect, useState } from "react";
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
-import React, { createContext, useEffect, useState } from "react";
-import app from "../firebase/firebase-init";
+import { app } from "../firebase/firebase-init";
 import axios from "axios";
 
-export const AuthContext = createContext();
-
+// eslint-disable-next-line react-refresh/only-export-components
+export const AuthContext = createContext(null);
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Create new user
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // Sign in existing user
   const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Update user profile (displayName, photoURL etc.)
-  const updateUser = (updateData) => {
-    return updateProfile(auth.currentUser, updateData);
+  const signInWithGoogle = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
   };
 
-  // Logout
-  const logOut = () => {
+  const logOut = async () => {
     setLoading(true);
     return signOut(auth);
   };
 
-  // Auth state change listener
-  useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-
-      if (currentUser?.email) {
-        const userData = { email: currentUser.email };
-
-        try {
-          const res = await axios.post("http://localhost:3000/jwt", userData);
-          const token = res.data.token;
-
-          localStorage.setItem("token", token);
-        } catch (error) {
-          console.error("JWT token error:", error);
-        }
-      } else {
-        localStorage.removeItem("token");
-      }
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
     });
+  };
 
+  // onAuthStateChange
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log("CurrentUser-->", currentUser?.email);
+      setUser(currentUser);
+      // if (currentUser?.email) {
+      //   setUser(currentUser);
+
+      //   // Get JWT token
+      //   await axios.post(
+      //     `${import.meta.env.VITE_API_URL}/jwt`,
+      //     {
+      //       email: currentUser?.email,
+      //     },
+      //     { withCredentials: true }
+      //   );
+      // } else {
+      //   setUser(currentUser);
+      //   await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
+      //     withCredentials: true,
+      //   });
+      // }
+      setLoading(false);
+    });
     return () => {
-      unSubscribe();
+      return unsubscribe();
     };
   }, []);
 
-  const authData = {
+  const authInfo = {
     user,
     setUser,
-    createUser,
-    logOut,
-    signIn,
     loading,
     setLoading,
-    updateUser,
+    createUser,
+    signIn,
+    signInWithGoogle,
+    logOut,
+    updateUserProfile,
   };
 
   return (
-    <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 

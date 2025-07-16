@@ -3,15 +3,13 @@ import { Modal, Input, Select } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
-import useUserRole from "../../Hooks/useUserRole";
 
 const { Option } = Select;
 
 const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
-  const { control, handleSubmit, reset, formState } = useForm();
+  const { control, handleSubmit, reset } = useForm();
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(false);
-  const { role } = useUserRole();
   const [hasJoined, setHasJoined] = useState(false);
 
   // Check if user has already joined this camp
@@ -28,7 +26,7 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
   }, [user?.email, camp?._id, visible, axiosSecure]);
 
   const handleOk = async (formData) => {
-    if (loading || hasJoined) return; // Prevent multiple clicks or if already joined
+    if (loading || hasJoined) return;
     setLoading(true);
     try {
       await axiosSecure.post("/camps-join", {
@@ -63,7 +61,7 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
       onOk={handleSubmit(handleOk)}
       okText={loading ? "Processing..." : "Join Now"}
       okButtonProps={{
-        disabled: loading || hasJoined || role !== "user", // Disable if loading, already joined, or not a user
+        disabled: loading || hasJoined,
         loading,
       }}
     >

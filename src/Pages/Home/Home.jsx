@@ -5,8 +5,11 @@ import FeedBacksSection from "../../Components/FeedBacksSection/FeedBacksSection
 import SuccessStory from "../../Components/SuccessStory/SuccessStory";
 import AboutUs from "../../Components/AboutUs/AboutUs";
 import HealthTips from "../../Components/HealthTips/HealthTips";
+import useUserRole from "../../Hooks/useUserRole";
 
 const Home = () => {
+  const { role } = useUserRole();
+  console.log(role);
   return (
     <div className="bg-base-200 text-base-content min-h-screen">
       <Helmet>
