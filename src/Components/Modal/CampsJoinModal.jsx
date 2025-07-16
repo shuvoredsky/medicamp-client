@@ -16,10 +16,15 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
   useEffect(() => {
     const checkJoinStatus = async () => {
       if (user?.email && camp?._id) {
-        const res = await axiosSecure.get(
-          `/check-join-status?email=${user.email}&campId=${camp._id}`
-        );
-        setHasJoined(res.data.joined);
+        try {
+          const res = await axiosSecure.get(
+            `/check-join-status?email=${user.email}&campId=${camp._id}`
+          );
+          setHasJoined(res.data.joined);
+        } catch (error) {
+          console.log("Error checking join status:", error);
+          setHasJoined(false);
+        }
       }
     };
     if (visible) checkJoinStatus();
@@ -28,29 +33,37 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
   const handleOk = async (formData) => {
     if (loading || hasJoined) return;
     setLoading(true);
+
     try {
-      await axiosSecure.post("/camps-join", {
+      const response = await axiosSecure.post("/camps-join", {
         ...formData,
         status: "unpaid",
         campId: camp?._id,
         organizerEmail: camp?.organizerEmail,
         confirmationStatus: "Pending",
       });
-      await axiosSecure.patch(`/camps-update-count/${camp?._id}`);
-      Swal.fire(
-        "Success",
-        "Registration successful! Please pay to confirm.",
-        "success"
-      );
-      onSubmit({ ...formData, status: "unpaid" });
-      setHasJoined(true); // Update join status
-      reset();
-      onClose();
+
+      if (response.data.success) {
+        Swal.fire(
+          "Success",
+          "Registration successful! Please pay to confirm.",
+          "success"
+        );
+        setHasJoined(true);
+        onSubmit({ ...formData, status: "unpaid" }); // Notify parent to refresh camp data
+        reset();
+        onClose();
+      }
     } catch (error) {
-      Swal.fire("Error", "Registration failed", "error");
-      console.log(error);
+      if (
+        error.response?.data?.message ===
+        "You have already registered for this camp"
+      ) {
+        setHasJoined(true);
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -64,6 +77,7 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
         disabled: loading || hasJoined,
         loading,
       }}
+      centered
     >
       <form className="space-y-3">
         <Controller
