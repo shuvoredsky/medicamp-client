@@ -4,6 +4,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../../firebase/firebase-init"; // Adjust the import path
+import { toast } from "react-toastify";
 
 const ParticipantProfile = () => {
   const { user } = useContext(AuthContext);
@@ -41,8 +44,31 @@ const ParticipantProfile = () => {
     },
   });
 
-  const handleFinish = (values) => {
-    mutation.mutate({ email: user?.email, ...values });
+  const handleFinish = async (values) => {
+    const { name, photoURL, contact } = values;
+
+    try {
+      // Update Firebase Auth profile
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: photoURL,
+      });
+      toast.success("Firebase Profile Updated Successfully");
+
+      // Update participant profile in backend
+      await mutation.mutateAsync({
+        email: user?.email,
+        name,
+        photoURL,
+        contact,
+      });
+
+      // Optionally reload the page or update state
+      // window.location.reload(); // Use with caution, consider state management instead
+    } catch (error) {
+      console.error("Profile Update Error:", error.message);
+      toast.error("Failed to update profile");
+    }
   };
 
   if (isLoading) {
@@ -69,13 +95,13 @@ const ParticipantProfile = () => {
         <Card className="shadow-md rounded-lg">
           <div className="flex flex-col items-center gap-4 p-4 sm:flex-row sm:items-start sm:gap-6">
             <Avatar
-              src={profile?.photoURL || user?.photoURL || "/default-avatar.png"}
+              src={user?.photoURL || "/default-avatar.png"}
               size={100}
               className="mx-auto"
             />
             <div className="text-center sm:text-left">
               <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
-                {profile?.name || "No Name"}
+                {profile?.name || user?.displayName || "No Name"}
               </h2>
               <p className="text-sm text-gray-600">
                 Contact: {profile?.contact || "Not Provided"}
@@ -104,8 +130,8 @@ const ParticipantProfile = () => {
         <Form
           layout="vertical"
           initialValues={{
-            name: profile?.name || "",
-            photoURL: profile?.photoURL || "",
+            name: user?.displayName,
+            photoURL: user?.photoURL,
             contact: profile?.contact || "",
           }}
           onFinish={handleFinish}
