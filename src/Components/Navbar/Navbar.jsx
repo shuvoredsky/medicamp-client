@@ -4,10 +4,12 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import { Avatar, Button, Dropdown, Menu, Layout, Space } from "antd";
 import { UserOutlined, LogoutOutlined, LoginOutlined } from "@ant-design/icons";
+import useUserRole from "../../Hooks/useUserRole";
 
 const { Header } = Layout;
 
 const Navbar = () => {
+  const { role } = useUserRole();
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();

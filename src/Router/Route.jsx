@@ -37,11 +37,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/available-camps",
-        element: <AvailableCamps />, // Public available camps route
+        element: <AvailableCamps />,
       },
       {
         path: "/camp-details/:id",
-        element: <CampDetails />, // Public camp details route
+        element: (
+          <PrivateRoute>
+            <CampDetails />
+          </PrivateRoute>
+        ), // Public camp details route
       },
       {
         path: "/dashboard",

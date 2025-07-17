@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import axios from "axios";
 
 const fetchCamps = async () => {
-  const res = await axios.get("http://localhost:3000/camps");
+  const res = await axios.get("http://localhost:3000//camps");
   return res.data;
 };
 

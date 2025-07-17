@@ -12,7 +12,7 @@ const FeedBacksSection = () => {
   } = useQuery({
     queryKey: ["feedbacks"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:3000/submit-feedback");
+      const res = await axios.get("http://localhost:3000//feedbacks");
       return res.data;
     },
   });
@@ -45,7 +45,7 @@ const FeedBacksSection = () => {
               className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
             >
               <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                {fb.participantEmail}
+                {fb.comment}
               </h3>
               <p className="text-gray-600 mb-3">{fb.comment}</p>
               <div className="flex items-center justify-between">

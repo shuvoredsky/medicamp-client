@@ -35,7 +35,6 @@ const Dashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  console.log(role);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">

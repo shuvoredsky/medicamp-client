@@ -5,7 +5,7 @@ import { Navigate, useLocation } from "react-router";
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  // const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   if (loading) {
     return <span className="loading loading-spinner loading-xl"></span>;
@@ -17,9 +17,9 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  // if (!token) {
-  //   return <Navigate to="/sign-in" />;
-  // }
+  if (!token) {
+    return <Navigate to="/sign-in" />;
+  }
 
   return children;
 };

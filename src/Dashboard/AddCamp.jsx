@@ -5,16 +5,17 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Provider/AuthProvider";
 import { imageUpload } from "../api/utils"; // Import the imageUpload function
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 const AddCamp = () => {
   const { user } = React.useContext(AuthContext);
-  console.log(user);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+  const axiosSecure = useAxiosSecure();
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -23,7 +24,10 @@ const AddCamp = () => {
   // Mutation to post new camp data
   const { mutate, isPending } = useMutation({
     mutationFn: async (campData) => {
-      const res = await axios.post("http://localhost:3000/camps", campData);
+      const res = await axiosSecure.post(
+        "http://localhost:3000//camps",
+        campData
+      );
       return res.data;
     },
     onSuccess: () => {
