@@ -39,9 +39,6 @@ const ParticipantProfile = () => {
       queryClient.invalidateQueries(["participant-profile", user?.email]);
       setIsModalOpen(false);
     },
-    onError: (error) => {
-      Swal.fire("Error", error.message || "Failed to update profile", "error");
-    },
   });
 
   const handleFinish = async (values) => {

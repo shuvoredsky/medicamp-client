@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router"; // Corrected import
 import { AuthContext } from "../Provider/AuthProvider";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 
@@ -39,10 +39,10 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header for all devices */}
-      <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+      <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50 h-16">
         <button
           onClick={toggleSidebar}
-          className="text-gray-600 md:hidden focus:outline-none focus:ring-2 focus:ring-blue-600 rounded"
+          className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded md:hidden"
           aria-label="Toggle sidebar"
         >
           <svg
@@ -60,6 +60,7 @@ const Dashboard = () => {
           </svg>
         </button>
         <h1 className="text-xl font-bold text-blue-600">Dashboard</h1>
+        <div className="md:hidden"></div> {/* Placeholder for symmetry */}
       </header>
 
       {/* Main content area with sidebar */}
@@ -76,9 +77,10 @@ const Dashboard = () => {
         <aside
           className={`bg-blue-50 shadow-md transform transition-transform duration-300 ease-in-out ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 w-64 fixed md:static top-0 left-0 h-full z-40 md:z-0`}
+          } md:translate-x-0 w-64 fixed md:static top-16 left-0 z-40 md:z-0 overflow-y-auto`}
+          style={{ height: "calc(100vh - 64px)" }} // Explicit height for mobile
         >
-          <div className="h-full px-4 py-6 space-y-4 overflow-y-auto">
+          <div className="h-full px-4 py-6 space-y-4">
             <nav className="space-y-2">
               {role === "organizer" && (
                 <>
@@ -143,7 +145,7 @@ const Dashboard = () => {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-auto p-4 md:p-6 bg-white md:ml-0 mt-16 md:mt-0">
+        <main className="flex-1 overflow-auto p-4 md:p-6 bg-white md:ml-64 mt-16 md:mt-0">
           <Outlet />
         </main>
       </div>
