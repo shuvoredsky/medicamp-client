@@ -83,7 +83,7 @@ const RegisteredCamps = () => {
 
   const submitFeedbackMutation = useMutation({
     mutationFn: async (data) =>
-      axiosSecure.post("", {
+      axiosSecure.post("/submit-feedback", {
         campId: selectedCamp._id,
         participantEmail: user?.displayName,
         ...data,

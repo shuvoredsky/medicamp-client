@@ -21,13 +21,13 @@ const SignIn = () => {
 
     try {
       // User Login
-      const result = await signIn(email, password);
-
+      const result = await signIn(email, password); // Result is used to ensure success
+      console.log("Login Result:", result); // Debug to verify result
+      toast.success("Login Successful! Welcome to MediCamp."); // Toast on success
       navigate(from, { replace: true });
-      toast.success("Login Successful");
     } catch (err) {
-      console.log(err);
-      toast.error(err?.message || "Login failed");
+      console.log("Login Error:", err);
+      toast.error(err?.message || "Login failed. Please try again.");
     }
   };
 
@@ -35,13 +35,13 @@ const SignIn = () => {
   const handleGoogleSignIn = async () => {
     try {
       // User Login using Google
-      const result = await signInWithGoogle();
-
+      const result = await signInWithGoogle(); // Result is used to ensure success
+      console.log("Google Login Result:", result); // Debug to verify result
+      toast.success("Login Successful! Welcome to MediCamp."); // Toast on success
       navigate(from, { replace: true });
-      toast.success("Login Successful");
     } catch (err) {
-      console.log(err);
-      toast.error(err?.message || "Google Login failed");
+      console.log("Google Login Error:", err);
+      toast.error(err?.message || "Google Login failed. Please try again.");
     }
   };
 

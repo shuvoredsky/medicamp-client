@@ -16,6 +16,7 @@ import ParticipantProfile from "../Dashboard/Participant-Dashboard/ParticipantPr
 import RegisteredCamps from "../Dashboard/Participant-Dashboard/RegisteredCamps.jsx";
 import PaymentHistory from "../Dashboard/Participant-Dashboard/PaymentHistory.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
+import OrganizerProfile from "../Dashboard/OrganizerProfile.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ), // Protected dashboard route
         children: [
+          {
+            path: "organizer-profile",
+            element: <OrganizerProfile></OrganizerProfile>,
+          },
           {
             path: "add-camp",
             element: <AddCamp />, // Protected add camp route

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router"; // Corrected import
 import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash, FaStethoscope } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -24,6 +24,10 @@ const SignUp = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["users"]);
+    },
+    onError: (error) => {
+      console.error("Add User to DB Error:", error);
+      toast.error("Failed to save user to database.");
     },
   });
 
@@ -57,13 +61,13 @@ const SignUp = () => {
         created_at: new Date().toISOString(),
         last_log_in: new Date().toISOString(),
       };
-      addUserToDB.mutate(userInfo);
+      await addUserToDB.mutateAsync(userInfo);
 
-      toast.success("Registration successful!");
+      toast.success("Registration successful! Welcome to MediCamp."); // Toast on success
       navigate("/");
     } catch (err) {
-      console.error(err);
-      toast.error(err?.message || "Signup failed");
+      console.error("Signup Error:", err);
+      toast.error(err?.message || "Signup failed. Please try again.");
     }
   };
 
@@ -79,13 +83,13 @@ const SignUp = () => {
         created_at: new Date().toISOString(),
         last_log_in: new Date().toISOString(),
       };
-      addUserToDB.mutate(userData);
+      await addUserToDB.mutateAsync(userData);
 
-      toast.success("Google Signup successful!");
+      toast.success("Google Signup successful! Welcome to MediCamp."); // Toast on success
       navigate("/");
     } catch (err) {
-      console.error(err);
-      toast.error(err?.message || "Google Signup failed");
+      console.error("Google Signup Error:", err);
+      toast.error(err?.message || "Google Signup failed. Please try again.");
     }
   };
 
@@ -93,7 +97,7 @@ const SignUp = () => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-blue-50">
       <div className="flex flex-col max-w-md w-full p-6 rounded-lg shadow-lg bg-white border border-blue-100 text-gray-800">
         <div className="mb-6 text-center">
-          <h1 className="text-4xl font-bold text-blue-700">Medicamp Sign Up</h1>
+          <h1 className="text-4xl font-bold text-blue-700">MediCamp Sign Up</h1>
           <p className="text-sm text-gray-600">Join our medical community</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">

@@ -47,17 +47,27 @@ const ManageRegisteredCamps = () => {
       queryClient.refetchQueries(["registered-camps", user?.email]);
     } catch (error) {
       Swal.fire("Error", "Failed to cancel registration", "error");
+      console.error("Cancel Error:", error); // Debug error
     }
   };
 
   const handleConfirmPayment = async (record) => {
     try {
-      await axiosSecure.patch(`/update-confirmation/${record._id}`, {
-        confirmationStatus: "Confirmed",
-      });
+      const res = await axiosSecure.patch(
+        `/update-confirmation/${record._id}`,
+        {
+          confirmationStatus: "Confirmed",
+        }
+      );
+      console.log("Confirm Payment Response:", res.data); // Debug response
       Swal.fire("Success", "Payment confirmed!", "success");
       queryClient.refetchQueries(["registered-camps", user?.email]);
     } catch (error) {
+      console.error("Confirm Payment Error:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      }); // Detailed error logging
       Swal.fire("Error", "Failed to confirm payment", "error");
     }
   };

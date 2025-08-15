@@ -53,13 +53,15 @@ const AuthProvider = ({ children }) => {
   // onAuthStateChange
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      console.log("CurrentUser-->", currentUser?.email);
       setUser(currentUser);
       setLoading(false);
       if (currentUser?.email) {
         const userData = { email: currentUser?.email };
         axios
-          .post("http://localhost:3000//jwt", userData)
+          .post(
+            "https://assignment-12-server-seven-plum.vercel.app/jwt",
+            userData
+          )
           .then((res) => {
             const token = res.data.token;
             localStorage.setItem("token", token);

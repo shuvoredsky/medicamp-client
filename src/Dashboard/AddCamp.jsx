@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../Provider/AuthProvider";
 import { imageUpload } from "../api/utils"; // Import the imageUpload function
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const AddCamp = () => {
   const { user } = React.useContext(AuthContext);
@@ -25,18 +26,30 @@ const AddCamp = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (campData) => {
       const res = await axiosSecure.post(
-        "http://localhost:3000//camps",
+        "https://assignment-12-server-seven-plum.vercel.app/camps",
         campData
-      );
+      ); // Fixed double slash
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Camp added successfully!");
-      reset();
-      setUploadedImage(null); // Reset image after success
+      Swal.fire({
+        icon: "success",
+        title: "Camp Added!",
+        text: "The medical camp has been successfully added.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        reset();
+        setUploadedImage(null); // Reset image after success
+      });
     },
-    onError: () => {
-      toast.error("Failed to add camp.");
+    onError: (error) => {
+      console.error("Mutation Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Failed to add camp. Please try again.",
+        confirmButtonText: "OK",
+      });
     },
   });
 

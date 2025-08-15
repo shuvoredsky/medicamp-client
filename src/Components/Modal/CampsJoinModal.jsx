@@ -60,6 +60,14 @@ const CampsJoinModal = ({ visible, onClose, camp, onSubmit, user }) => {
         "You have already registered for this camp"
       ) {
         setHasJoined(true);
+        Swal.fire(
+          "Warning",
+          "You have already registered for this camp",
+          "warning"
+        );
+      } else {
+        console.error("Registration error:", error);
+        Swal.fire("Error", "Registration failed", "error");
       }
     } finally {
       setLoading(false);

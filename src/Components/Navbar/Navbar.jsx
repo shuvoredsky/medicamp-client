@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router"; // Corrected import
 import { AuthContext } from "../../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import { Avatar, Button, Dropdown, Menu, Layout, Space } from "antd";
 import { UserOutlined, LogoutOutlined, LoginOutlined } from "@ant-design/icons";
 import useUserRole from "../../Hooks/useUserRole";
+import logo from "../../assets/logo.png";
 
 const { Header } = Layout;
 
@@ -20,12 +21,20 @@ const Navbar = () => {
       .catch((error) => toast.error(error.message));
   };
 
+  const handleDashboardNavigate = () => {
+    if (role === "user") {
+      navigate("/dashboard/analytics");
+    } else {
+      navigate("/dashboard/organizer-profile");
+    }
+  };
+
   const menu = (
     <Menu>
       <Menu.Item key="1" disabled>
         {user?.displayName || "User"}
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => navigate("/dashboard")}>
+      <Menu.Item key="2" onClick={handleDashboardNavigate}>
         Dashboard
       </Menu.Item>
       <Menu.Item
@@ -53,7 +62,12 @@ const Navbar = () => {
         className="cursor-pointer text-xl font-bold text-blue-600"
         onClick={() => navigate("/")}
       >
-        MediCamp
+        <div className="flex items-center">
+          <div>
+            <img className="h-10 w-10" src={logo} alt="" />
+          </div>
+          <div>MediCamp</div>
+        </div>
       </div>
 
       {/* Nav Links */}

@@ -22,7 +22,7 @@ const PaymentHistory = () => {
           `/payment-history?email=${user?.email}`
         );
         console.log("Raw API Response:", res.data); // Debug raw response
-        return res.data || [];
+        return Array.isArray(res.data) ? res.data : [];
       } catch (err) {
         console.error("Query Error Details:", {
           message: err.message,
@@ -47,15 +47,14 @@ const PaymentHistory = () => {
   console.log("Filtered Payment History:", paymentHistory);
 
   // Filter payment history based on search term and ensure status is "paid" (case insensitive)
-  const filteredPaymentHistory = paymentHistory.filter(
-    (payment) =>
-      payment.status?.toLowerCase() === "paid" && // Case insensitive check
-      (payment.campName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.registeredAt
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        payment.doctorName?.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredPaymentHistory = paymentHistory.filter((payment) => {
+    const isPaid = payment.status?.toLowerCase() === "paid";
+    const matchesSearch =
+      payment.campName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      payment.registeredAt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      payment.doctorName?.toLowerCase().includes(searchTerm.toLowerCase());
+    return isPaid && matchesSearch;
+  });
 
   console.log("After Filtering:", filteredPaymentHistory); // Debug after filtering
 
@@ -64,37 +63,48 @@ const PaymentHistory = () => {
       title: "Camp Name",
       dataIndex: "campName",
       key: "campName",
-      sorter: (a, b) => a.campName.localeCompare(b.campName),
+      render: (text) => text || "N/A", // Handle missing data
+      sorter: (a, b) => (a.campName || "").localeCompare(b.campName || ""),
     },
     {
       title: "Date",
       dataIndex: "registeredAt",
       key: "registeredAt",
-      render: (text) => new Date(text).toLocaleDateString(),
-      sorter: (a, b) => new Date(a.registeredAt) - new Date(b.registeredAt),
+      render: (text) => (text ? new Date(text).toLocaleDateString() : "N/A"),
+      sorter: (a, b) =>
+        new Date(a.registeredAt || 0) - new Date(b.registeredAt || 0),
     },
     {
       title: "Healthcare Professional",
       dataIndex: "doctorName",
       key: "doctorName",
-      sorter: (a, b) => a.doctorName.localeCompare(b.doctorName),
+      render: (text) => text || "N/A",
+      sorter: (a, b) => (a.doctorName || "").localeCompare(b.doctorName || ""),
     },
     {
       title: "Fees",
       dataIndex: "fees",
       key: "fees",
-      sorter: (a, b) => a.fees - b.fees,
+      render: (text) => (text ? `$${text}` : "N/A"),
+      sorter: (a, b) => (a.fees || 0) - (b.fees || 0),
     },
-    { title: "Payment Status", dataIndex: "status", key: "status" },
+    {
+      title: "Payment Status",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => text || "N/A",
+    },
     {
       title: "Confirmation Status",
       dataIndex: "confirmationStatus",
       key: "confirmationStatus",
+      render: (text) => text || "N/A",
     },
     {
       title: "Transaction ID",
       dataIndex: "transactionId",
       key: "transactionId",
+      render: (text) => text || "N/A",
     },
   ];
 
@@ -150,6 +160,7 @@ const PaymentHistory = () => {
         className="shadow-lg rounded-lg"
         scroll={{ x: 800 }}
         bordered
+        locale={{ emptyText: "No payment history available" }} // Custom empty message
       />
     </div>
   );
