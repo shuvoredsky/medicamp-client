@@ -31,7 +31,7 @@ const CampSection = () => {
 
   return (
     <section className="py-10 px-4 max-w-7xl mx-auto">
-      <h2 className="text-2xl sm:text-3xl font-semibold text-center text-blue-700 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-semibold text-center text-teal-700 mb-6">
         Popular Medical Camps
       </h2>
 
@@ -39,22 +39,22 @@ const CampSection = () => {
         {popularCamps.map((camp) => (
           <div
             key={camp._id}
-            className="bg-white rounded-lg border-2 border-blue-500 shadow hover:shadow-lg transition-all duration-200"
+            className="bg-white rounded-xl border border-teal-100 shadow-md hover:shadow-lg hover:border-teal-300 transition-all duration-300 overflow-hidden"
           >
             <img
               src={camp.image}
               alt={camp.campName}
-              className="w-full h-40 sm:h-48 object-cover rounded-t-lg"
+              className="w-full h-40 sm:h-48 object-cover"
             />
             <div className="p-4 space-y-1 text-sm">
-              <h3 className="text-base font-bold text-blue-600">
+              <h3 className="text-base font-bold text-teal-700">
                 {camp.campName}
               </h3>
               <p className="text-gray-600">📍 {camp.location}</p>
               <p className="text-gray-600">💰 ${camp.fees}</p>
               <p className="text-gray-600">🗓️ {camp.dateTime}</p>
               <p className="text-gray-600">👨‍⚕️ {camp.doctorName}</p>
-              <p className="text-green-600 font-medium">
+              <p className="text-teal-600 font-semibold">
                 👥 {camp.participants || 0} Participants
               </p>
               <p className="text-gray-500 text-xs line-clamp-2">
@@ -68,7 +68,7 @@ const CampSection = () => {
       <div className="text-center mt-8">
         <Link
           to="/available-camps"
-          className="inline-block text-sm px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          className="inline-block text-sm px-5 py-2 font-semibold bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
         >
           See All Camps
         </Link>

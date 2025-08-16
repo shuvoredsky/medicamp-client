@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router"; // Corrected import
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import { Avatar, Button, Dropdown, Menu, Layout, Space } from "antd";
@@ -51,15 +51,15 @@ const Navbar = () => {
   const navLinkClass = (path) =>
     `transition duration-200 ${
       pathname === path
-        ? "text-blue-800 font-semibold "
-        : "text-gray-700 hover:text-blue-600"
+        ? "text-white font-semibold "
+        : "text-gray-700 hover:text-white"
     }`;
 
   return (
-    <Header className="!bg-white shadow-sm px-4 flex justify-between items-center sticky top-0 z-50">
+    <Header className="bg-teal-600 shadow-sm px-4 flex justify-between items-center sticky top-0 z-50">
       {/* Logo */}
       <div
-        className="cursor-pointer text-xl font-bold text-blue-600"
+        className="cursor-pointer text-xl font-bold text-white"
         onClick={() => navigate("/")}
       >
         <div className="flex items-center">
@@ -71,7 +71,7 @@ const Navbar = () => {
       </div>
 
       {/* Nav Links */}
-      <div className="hidden md:flex items-center gap-6">
+      <div className="hidden md:flex items-center gap-6 text-white">
         <Link to="/" className={navLinkClass("/")}>
           Home
         </Link>

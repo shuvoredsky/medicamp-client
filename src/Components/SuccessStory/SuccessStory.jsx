@@ -40,23 +40,29 @@ const SuccessStory = () => {
   ];
 
   return (
-    <div className="py-8 bg-gray-100">
-      <h2 className="text-3xl font-bold text-center mb-8 text-blue-600">
+    <div className="py-12 bg-teal-50">
+      <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-teal-700">
         Success Stories
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
         {stories.map((story, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col justify-between"
+            className="bg-white rounded-xl border border-teal-100 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col overflow-hidden"
           >
-            <div className="h-40 bg-blue-100 flex items-center justify-center">
-              <span className="text-4xl">👨‍⚕️</span>
+            <div className="h-40 bg-teal-200 flex items-center justify-center text-white text-5xl">
+              👨‍⚕️
             </div>
-            <div className="p-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">{story.name}</h3>
-              <p className="text-gray-600 mb-2 italic">" {story.quote} "</p>
-              <p className="text-blue-600 font-bold">Camp: {story.camp}</p>
+            <div className="p-6 text-center flex flex-col flex-1">
+              <h3 className="text-lg font-bold text-teal-700 mb-2">
+                {story.name}
+              </h3>
+              <p className="text-gray-600 mb-3 italic leading-relaxed">
+                "{story.quote}"
+              </p>
+              <p className="text-teal-600 font-semibold mt-auto">
+                {story.camp}
+              </p>
             </div>
           </div>
         ))}
