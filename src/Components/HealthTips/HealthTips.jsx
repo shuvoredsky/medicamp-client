@@ -1,6 +1,7 @@
 import React from "react";
 import Lottie from "lottie-react";
 import healthTipLottie from "../../../public/health-tips.json";
+import SplitText from "../SplitText";
 
 const HealthTips = () => {
   const tips = [
@@ -23,13 +24,23 @@ const HealthTips = () => {
       icon: "🍎",
     },
   ];
-
+  const handleAnimationComplete = () => {
+    console.log("All letters have animated in AboutUs!"); // এটা console-এ দেখো যদি complete হয়
+  };
   return (
     <section className="py-12 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[#00E5FF]">
-          Health Tips
-        </h2>
+        <SplitText
+          text="Health Tips"
+          className="text-3xl sm:text-4xl font-bold text-center mb-12 text-[#00E5FF]"
+          delay={0.3} // Delay বাড়ালাম যাতে page load-এর পর visible হয়
+          duration={1.2}
+          ease="power3.out"
+          splitType="chars"
+          from={{ opacity: 0, y: 50 }} // Y বাড়ালাম more dramatic effect
+          to={{ opacity: 1, y: 0 }}
+          onLetterAnimationComplete={handleAnimationComplete}
+        />
 
         <div className="flex flex-col lg:flex-row items-start gap-8">
           {/* Left side cards */}

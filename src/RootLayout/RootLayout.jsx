@@ -5,7 +5,7 @@ import Footer from "../Components/Footer/Footer";
 
 const RootLayout = () => {
   return (
-    <div className="bg-teal-50 text-base-content min-h-screen transition-colors duration-300">
+    <div className="bg-black text-base-content min-h-screen transition-colors duration-300">
       <Navbar />
       <main className="min-h-[calc(100vh-136px)]">
         <Outlet />

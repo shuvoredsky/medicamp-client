@@ -1,12 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import React from "react";
+import ScrollStack, { ScrollStackItem } from "./ScrollStack"; // Path adjust
+import "./ScrollStack.css";
 
 const SuccessStory = () => {
-  const containerRef = useRef(null);
-
   const stories = [
     {
       name: "Rahim Ullah",
@@ -45,68 +41,50 @@ const SuccessStory = () => {
     },
   ];
 
-  useEffect(() => {
-    // Container-কে trigger করো
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
-        scrub: 1,
-      },
-    });
-
-    tl.fromTo(
-      ".story-card",
-      {
-        opacity: 0,
-        y: 50,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power2.out",
-      }
-    );
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
+  const handleStackComplete = () => {
+    console.log("Story stack animation complete!");
+  };
 
   return (
     <div className="py-12 bg-black text-white">
-      <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[#00E5FF]">
+      <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[#00E5FF] px-4">
         Success Stories
       </h2>
-      <div
-        ref={containerRef}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4"
+
+      <ScrollStack
+        useWindowScroll={false} // Fix: Container-based, no global conflict
+        className="max-w-4xl mx-auto px-4 min-h-screen" // Add min-h for scroll space
+        itemDistance={60} // Increased gap
+        itemScale={0.04} // Slightly less scale for subtle effect
+        itemStackDistance={60} // More spacing in stack
+        stackPosition="50%" // Later start for gradual animation
+        scaleEndPosition="5%" // Longer animation duration
+        baseScale={0.95} // Bigger base
+        rotationAmount={1} // Reduced rotation
+        blurAmount={0.5} // Reduced blur
+        onStackComplete={handleStackComplete}
       >
         {stories.map((story, index) => (
-          <div
-            key={index}
-            className="story-card bg-white rounded-xl border border-teal-100 shadow-md flex flex-col overflow-hidden opacity-0" // Initial opacity 0 for animation
-          >
-            <div className="h-40 bg-black flex items-center justify-center text-white text-5xl">
-              👨‍⚕️
+          <ScrollStackItem key={index}>
+            <div className="story-card bg-white rounded-xl border border-teal-100 shadow-md flex flex-col overflow-hidden">
+              <div className="h-40 bg-teal-200 flex items-center justify-center text-white text-5xl">
+                👨‍⚕️
+              </div>
+              <div className="p-6 text-center flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-teal-700 mb-2">
+                  {story.name}
+                </h3>
+                <p className="text-gray-600 mb-3 italic leading-relaxed">
+                  "{story.quote}"
+                </p>
+                <p className="text-teal-600 font-semibold mt-auto">
+                  {story.camp}
+                </p>
+              </div>
             </div>
-            <div className="p-6 text-center flex flex-col flex-1">
-              <h3 className="text-lg font-bold text-teal-700 mb-2">
-                {story.name}
-              </h3>
-              <p className="text-gray-600 mb-3 italic leading-relaxed">
-                "{story.quote}"
-              </p>
-              <p className="text-teal-600 font-semibold mt-auto">
-                {story.camp}
-              </p>
-            </div>
-          </div>
+          </ScrollStackItem>
         ))}
-      </div>
+      </ScrollStack>
     </div>
   );
 };
