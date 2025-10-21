@@ -5,16 +5,16 @@ const AboutUs = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="py-16 bg-teal-50">
+    <div className="py-16 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-teal-700">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-[#00E5FF]">
           About Us
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           {/* Left Content */}
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="text-white leading-relaxed space-y-4">
             <p>
               MediCamp is a dedicated non-profit initiative launched in 2023,
               aimed at bringing free healthcare services to underserved rural

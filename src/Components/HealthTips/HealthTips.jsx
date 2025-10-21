@@ -23,9 +23,9 @@ const HealthTips = () => {
   ];
 
   return (
-    <div className="py-12 bg-teal-50">
+    <div className="py-12 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-teal-700">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[#00E5FF]">
           Health Tips
         </h2>
 

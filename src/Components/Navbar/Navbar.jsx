@@ -48,15 +48,17 @@ const Navbar = () => {
     </Menu>
   );
 
+  // ✨ Updated NavLink Style
   const navLinkClass = (path) =>
-    `px-3 py-1 rounded-md transition duration-200 ${
-      pathname === path
-        ? "bg-white text-teal-700 font-semibold"
-        : "text-white hover:bg-teal-700/80"
-    }`;
+    `relative px-3 py-1 transition duration-300 
+     ${
+       pathname === path
+         ? "text-green-400 font-semibold after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-green-400"
+         : "text-white hover:text-green-400 hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-full hover:after:h-[2px] hover:after:bg-green-400"
+     }`;
 
   return (
-    <Header className="bg-gradient-to-r from-teal-600 to-teal-700 shadow-md px-4 flex justify-between items-center sticky top-0 z-50">
+    <Header className="[&]:bg-black bg-black shadow-md px-4 flex justify-between items-center sticky top-0 z-50">
       {/* Logo */}
       <div
         className="cursor-pointer flex items-center gap-2"
@@ -67,45 +69,42 @@ const Navbar = () => {
       </div>
 
       {/* Nav Links */}
-      <div className="hidden md:flex items-center gap-4">
+      <div className="hidden md:flex items-center gap-6">
         <Link to="/" className={navLinkClass("/")}>
           Home
         </Link>
-        <div>
-          {role === "user" ? (
-            <div>
-              <Link
-                to="/dashboard/profile"
-                className={navLinkClass("/dashboard/profile")}
-              >
-                Profile
-              </Link>
-              <Link
-                to="/dashboard/registered-camps"
-                className={navLinkClass("/dashboard/registered-camps")}
-              >
-                My Registered Camps
-              </Link>
-            </div>
-          ) : role === "organizer" ? (
-            <div>
-              <Link
-                to="/dashboard/organizer-profile"
-                className={navLinkClass("/dashboard/organizer-profile")}
-              >
-                Profile
-              </Link>
-              <Link
-                to="/dashboard/add-camp"
-                className={navLinkClass("/dashboard/add-camp")}
-              >
-                Add a Camp
-              </Link>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+        {role === "user" && (
+          <>
+            <Link
+              to="/dashboard/profile"
+              className={navLinkClass("/dashboard/profile")}
+            >
+              Profile
+            </Link>
+            <Link
+              to="/dashboard/registered-camps"
+              className={navLinkClass("/dashboard/registered-camps")}
+            >
+              My Registered Camps
+            </Link>
+          </>
+        )}
+        {role === "organizer" && (
+          <>
+            <Link
+              to="/dashboard/organizer-profile"
+              className={navLinkClass("/dashboard/organizer-profile")}
+            >
+              Profile
+            </Link>
+            <Link
+              to="/dashboard/add-camp"
+              className={navLinkClass("/dashboard/add-camp")}
+            >
+              Add a Camp
+            </Link>
+          </>
+        )}
         {user && (
           <Link
             to="/available-camps"
@@ -115,11 +114,9 @@ const Navbar = () => {
           </Link>
         )}
         {!user && (
-          <div>
-            <Link to="/sign-in" className={navLinkClass("/sign-in")}>
-              Join Us
-            </Link>
-          </div>
+          <Link to="/sign-in" className={navLinkClass("/sign-in")}>
+            Join Us
+          </Link>
         )}
         <Link to="/contact-us" className={navLinkClass("/contact-us")}>
           Contact Us
@@ -142,14 +139,14 @@ const Navbar = () => {
               type={pathname === "/sign-in" ? "primary" : "default"}
               onClick={() => navigate("/sign-in")}
               icon={<LoginOutlined />}
-              className="rounded-lg"
+              className="rounded-lg bg-green-500 text-black hover:bg-white border-none"
             >
               Sign In
             </Button>
             <Button
               type={pathname === "/sign-up" ? "primary" : "default"}
               onClick={() => navigate("/sign-up")}
-              className="rounded-lg"
+              className="rounded-lg bg-white text-black hover:bg-white border-none"
             >
               Sign Up
             </Button>

@@ -19,7 +19,7 @@ const HeroSection = () => {
             better healthcare access and smart organization.
           </p>
           <div>
-            <button className="mt-4 bg-[#00E5FF] text-black font-semibold px-8 py-3 rounded-full hover:bg-[#00bcd4] transition-all duration-300">
+            <button className="mt-4 bg-[#00E5FF] text-black  px-8 py-3 rounded-full hover:bg-[#00bcd4] transition-all duration-300 font-bold">
               Explore Now
             </button>
           </div>
