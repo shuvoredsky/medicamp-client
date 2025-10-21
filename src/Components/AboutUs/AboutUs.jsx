@@ -33,7 +33,7 @@ const AboutUs = () => {
 
           {/* Right Mission Card */}
           <div className="flex justify-center">
-            <div className="bg-teal-200 border border-teal-200 rounded-xl p-8 shadow-md w-full max-w-md">
+            <div className="bg-white rounded-xl p-8 shadow-md w-full max-w-md">
               <h3 className="text-xl font-semibold text-gray-700 mb-3">
                 Our Mission
               </h3>
@@ -43,7 +43,7 @@ const AboutUs = () => {
               </p>
               <button
                 onClick={() => navigate("/available-camps")}
-                className="mt-6 cursor-pointer font-semibold bg-teal-700 text-white px-6 py-2 rounded-lg hover:bg-teal-900 transition-colors"
+                className="mt-6 cursor-pointer font-semibold bg-[#00E5FF] text-black px-6 py-2 rounded-lg hover:bg-teal-900 transition-colors"
               >
                 Learn More
               </button>

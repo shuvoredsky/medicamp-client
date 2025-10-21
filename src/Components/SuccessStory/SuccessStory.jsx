@@ -50,31 +50,27 @@ const SuccessStory = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 80%", // যখন container-এর top viewport-এর 80% এ পৌঁছাবে
+        start: "top 80%",
         end: "bottom 20%",
-        scrub: 1, // Smooth scroll sync (1 = 1s delay for smoothness)
-        // pin: true,  // যদি whole section sticky করতে চাও, uncomment করো
-        // pinSpacing: false,
+        scrub: 1,
       },
     });
 
-    // Timeline-এ cards গুলোকে stagger করে animate করো (fade in + slide up)
     tl.fromTo(
       ".story-card",
       {
         opacity: 0,
-        y: 50, // নিচ থেকে 50px উপরে slide up
+        y: 50,
       },
       {
         opacity: 1,
         y: 0,
         duration: 0.8,
-        stagger: 0.2, // প্রত্যেক card-এর মধ্যে 0.2s delay
+        stagger: 0.2,
         ease: "power2.out",
       }
     );
 
-    // Cleanup: ScrollTrigger গুলো kill করো unmount-এ
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
@@ -86,7 +82,7 @@ const SuccessStory = () => {
         Success Stories
       </h2>
       <div
-        ref={containerRef} // Ref এখন properly use হচ্ছে
+        ref={containerRef}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4"
       >
         {stories.map((story, index) => (
@@ -94,7 +90,7 @@ const SuccessStory = () => {
             key={index}
             className="story-card bg-white rounded-xl border border-teal-100 shadow-md flex flex-col overflow-hidden opacity-0" // Initial opacity 0 for animation
           >
-            <div className="h-40 bg-teal-200 flex items-center justify-center text-white text-5xl">
+            <div className="h-40 bg-black flex items-center justify-center text-white text-5xl">
               👨‍⚕️
             </div>
             <div className="p-6 text-center flex flex-col flex-1">
