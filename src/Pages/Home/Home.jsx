@@ -5,6 +5,7 @@ import FeedBacksSection from "../../Components/FeedBacksSection/FeedBacksSection
 import SuccessStory from "../../Components/SuccessStory/SuccessStory";
 import AboutUs from "../../Components/AboutUs/AboutUs";
 import HealthTips from "../../Components/HealthTips/HealthTips";
+import Hero from "../../Components/Hero/Hero";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
         <title>Medicamp | Home</title>
       </Helmet>
       {/* <LostFoundSlider /> */}
+      <Hero></Hero>
       <Slider></Slider>
       <CampSection></CampSection>
       <SuccessStory></SuccessStory>

@@ -229,8 +229,8 @@ const RegisteredCamps = () => {
   ];
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6">
-      <Title level={3} className="text-center mb-6">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 bg-teal-50">
+      <Title level={3} className="text-center mb-6 text-teal-600 ">
         Registered Camps
       </Title>
 
@@ -239,7 +239,7 @@ const RegisteredCamps = () => {
         <input
           type="text"
           placeholder="Search by Camp Name or Status (paid/unpaid)..."
-          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

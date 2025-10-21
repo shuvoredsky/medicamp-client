@@ -60,7 +60,7 @@ const Dashboard = () => {
             />
           </svg>
         </button>
-        <h1 className="text-xl font-bold text-blue-600">Dashboard</h1>
+        <h1 className="text-xl font-bold text-teal-600">Dashboard</h1>
       </header>
 
       {/* Main content area with sidebar */}

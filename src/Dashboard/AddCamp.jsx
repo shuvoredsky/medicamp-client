@@ -26,7 +26,7 @@ const AddCamp = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (campData) => {
       const res = await axiosSecure.post(
-        "https://assignment-12-server-seven-plum.vercel.app/camps",
+        "https://medicamp-api.onrender.com/camps",
         campData
       ); // Fixed double slash
       return res.data;
@@ -88,7 +88,7 @@ const AddCamp = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow">
+    <div className="max-w-3xl mx-auto p-6 bg-teal-50 rounded shadow">
       <h2 className="text-2xl font-semibold mb-6 text-center">
         Add Medical Camp
       </h2>
@@ -216,7 +216,7 @@ const AddCamp = () => {
         <button
           type="submit"
           disabled={isPending || isUploading}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="bg-teal-700 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
           {isPending || isUploading ? "Processing..." : "Add Camp"}
         </button>

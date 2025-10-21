@@ -98,7 +98,7 @@ const ManageCamps = () => {
 
   return (
     <div className="p-4 sm:p-6 md:p-10 max-w-7xl mx-auto">
-      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-blue-700 text-center sm:text-left">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-teal-700 text-center sm:text-left">
         Manage Camps
       </h2>
 
@@ -107,7 +107,7 @@ const ManageCamps = () => {
         <Input
           type="text"
           placeholder="Search by Camp Name, Doctor, Location, or Date..."
-          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full sm:w-1/2 lg:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

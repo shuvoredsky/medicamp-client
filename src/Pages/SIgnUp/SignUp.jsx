@@ -94,10 +94,13 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-blue-50">
+    <div
+      className="flex justify-center items-center min-h-screen bg-teal-50
+    "
+    >
       <div className="flex flex-col max-w-md w-full p-6 rounded-lg shadow-lg bg-white border border-blue-100 text-gray-800">
         <div className="mb-6 text-center">
-          <h1 className="text-4xl font-bold text-blue-700">MediCamp Sign Up</h1>
+          <h1 className="text-4xl font-bold text-teal-700">MediCamp Sign Up</h1>
           <p className="text-sm text-gray-600">Join our medical community</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -175,7 +178,7 @@ const SignUp = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-md hover:bg-blue-700 transition duration-200 flex items-center justify-center"
+            className="w-full bg-teal-700 text-white font-medium py-2.5 rounded-md hover:bg-blue-700 transition duration-200 flex items-center justify-center"
             disabled={loading}
           >
             {loading ? (
@@ -201,7 +204,7 @@ const SignUp = () => {
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/sign-in" className="text-blue-600 hover:underline">
+          <Link to="/sign-in" className="text-teal-600 hover:underline">
             Login
           </Link>
         </p>

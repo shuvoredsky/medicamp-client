@@ -35,7 +35,7 @@ const ParticipantAnalytics = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 bg-white shadow-md rounded-lg max-w-full overflow-hidden">
-      <h2 className="text-xl sm:text-2xl font-bold text-blue-600 text-center mb-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-teal-600 text-center mb-6">
         Camp Registration Analytics (Pie Chart)
       </h2>
 

@@ -31,13 +31,11 @@ const SignIn = () => {
     }
   };
 
-  // Handle Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      // User Login using Google
-      const result = await signInWithGoogle(); // Result is used to ensure success
-      console.log("Google Login Result:", result); // Debug to verify result
-      toast.success("Login Successful! Welcome to MediCamp."); // Toast on success
+      const result = await signInWithGoogle();
+      console.log("Google Login Result:", result);
+      toast.success("Login Successful! Welcome to MediCamp.");
       navigate(from, { replace: true });
     } catch (err) {
       console.log("Google Login Error:", err);
@@ -46,7 +44,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-blue-50">
+    <div className="flex justify-center items-center min-h-screen bg-teal-50">
       <Card className="w-full max-w-md p-6 rounded-lg shadow-lg bg-white border border-blue-100">
         <div className="mb-6 text-center">
           <Title level={2} className="text-blue-700">

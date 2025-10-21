@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Card, Button, Modal, Form, Input, Avatar } from "antd";
+import { Card, Button, Modal, Form, Input, Avatar, Spin } from "antd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
@@ -68,9 +68,7 @@ const ParticipantProfile = () => {
     }
   };
 
-  if (isLoading) {
-    return <p className="text-center py-10 text-base">Loading...</p>;
-  }
+  if (isLoading) return <Spin size="large" className="text-center py-10" />;
 
   if (error && error.response?.status === 404) {
     return (

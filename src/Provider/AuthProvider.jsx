@@ -58,10 +58,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser?.email) {
         const userData = { email: currentUser?.email };
         axios
-          .post(
-            "https://assignment-12-server-seven-plum.vercel.app/jwt",
-            userData
-          )
+          .post("https://medicamp-api.onrender.com/jwt", userData)
           .then((res) => {
             const token = res.data.token;
             localStorage.setItem("token", token);

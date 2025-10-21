@@ -13,7 +13,7 @@ const FeedBacksSection = () => {
     queryKey: ["feedbacks"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://assignment-12-server-seven-plum.vercel.app/feedbacks"
+        "https://medicamp-api.onrender.com/feedbacks"
       );
       return res.data;
     },
@@ -25,7 +25,6 @@ const FeedBacksSection = () => {
         <Spin tip="Loading feedbacks..." size="large" />
       </div>
     );
-
   if (error)
     return (
       <div className="flex justify-center py-10">
@@ -34,25 +33,30 @@ const FeedBacksSection = () => {
     );
 
   return (
-    <div className="py-10 px-4 md:px-10 bg-gray-100">
-      <h2 className="text-3xl font-bold text-center text-blue-700 mb-8">
+    <div className="py-12 px-4 md:px-10 bg-teal-50">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 mb-8 text-center tracking-wide">
         What Participants Say About Our Camps
       </h2>
-
       {feedbacks && feedbacks.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {feedbacks.map((fb) => (
             <div
               key={fb._id}
-              className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
+              className="bg-gradient-to-br from-teal-700 to-teal-800 rounded-xl shadow-md p-6 hover:shadow-xl hover:scale-105 hover:from-teal-800 hover:to-teal-900 transition-all duration-300 transform"
             >
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+              <h3 className="text-lg md:text-xl font-semibold text-white mb-2 line-clamp-1">
                 {fb.participantEmail}
               </h3>
-              <p className="text-gray-600 mb-3">{fb.comment}</p>
+              <p className="text-white mb-4 text-sm md:text-base line-clamp-3">
+                {fb.comment}
+              </p>
               <div className="flex items-center justify-between">
-                <Rate disabled defaultValue={fb.rating || 0} />
-                <span className="text-sm text-gray-400">
+                <Rate
+                  disabled
+                  defaultValue={fb.rating || 0}
+                  style={{ color: "gold" }}
+                />
+                <span className="text-xs md:text-sm text-teal-100">
                   {dayjs(fb.submittedAt).format("DD MMM, YYYY")}
                 </span>
               </div>
@@ -60,7 +64,9 @@ const FeedBacksSection = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-600">No feedbacks available.</p>
+        <p className="text-center text-teal-600 text-lg">
+          No feedbacks available.
+        </p>
       )}
     </div>
   );

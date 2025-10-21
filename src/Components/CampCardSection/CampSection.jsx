@@ -2,11 +2,10 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import axios from "axios";
+import { Spin } from "antd";
 
 const fetchCamps = async () => {
-  const res = await axios.get(
-    "https://assignment-12-server-seven-plum.vercel.app/camps"
-  );
+  const res = await axios.get("https://medicamp-api.onrender.com/camps");
   return res.data;
 };
 
@@ -20,7 +19,12 @@ const CampSection = () => {
     queryFn: fetchCamps,
   });
 
-  if (isLoading) return <p className="text-center py-10">Loading camps...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spin tip="Loading feedbacks..." size="large" />
+      </div>
+    );
   if (isError)
     return <p className="text-center text-red-500">Failed to load camps.</p>;
 
@@ -30,8 +34,8 @@ const CampSection = () => {
     .slice(0, 6);
 
   return (
-    <section className="py-10 px-4 max-w-7xl mx-auto">
-      <h2 className="text-2xl sm:text-3xl font-semibold text-center text-teal-700 mb-6">
+    <section className="py-12 px-4 max-w-7xl mx-auto bg-teal-50">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-teal-800 mb-8 text-center tracking-tight">
         Popular Medical Camps
       </h2>
 
@@ -39,36 +43,33 @@ const CampSection = () => {
         {popularCamps.map((camp) => (
           <div
             key={camp._id}
-            className="bg-white rounded-xl border border-teal-100 shadow-md hover:shadow-lg hover:border-teal-300 transition-all duration-300 overflow-hidden"
+            className="bg-gradient-to-br from-teal-100 to-teal-50 rounded-xl border border-teal-200 shadow-lg hover:shadow-xl hover:scale-105 hover:border-teal-300 transition-all duration-300 overflow-hidden group"
           >
             <img
               src={camp.image}
               alt={camp.campName}
-              className="w-full h-40 sm:h-48 object-cover"
+              className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-300"
             />
-            <div className="p-4 space-y-1 text-sm">
-              <h3 className="text-base font-bold text-teal-700">
+            <div className="p-5 space-y-2 text-sm">
+              <h3 className="text-lg font-semibold text-teal-900 line-clamp-1">
                 {camp.campName}
               </h3>
-              <p className="text-gray-600">📍 {camp.location}</p>
-              <p className="text-gray-600">💰 ${camp.fees}</p>
-              <p className="text-gray-600">🗓️ {camp.dateTime}</p>
-              <p className="text-gray-600">👨‍⚕️ {camp.doctorName}</p>
-              <p className="text-teal-600 font-semibold">
+              <p className="text-teal-700">📍 {camp.location}</p>
+              <p className="text-teal-700">💰 ${camp.fees}</p>
+              <p className="text-teal-700">🗓️ {camp.dateTime}</p>
+              <p className="text-teal-700">👨‍⚕️ {camp.doctorName}</p>
+              <p className="text-teal-800 font-medium">
                 👥 {camp.participants || 0} Participants
-              </p>
-              <p className="text-gray-500 text-xs line-clamp-2">
-                {camp.description}
               </p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="text-center mt-8">
+      <div className="text-center mt-10">
         <Link
           to="/available-camps"
-          className="inline-block text-sm px-5 py-2 font-semibold bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+          className="inline-block px-6 py-3 font-semibold bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg shadow-md hover:from-teal-700 hover:to-teal-800 transition-all duration-300 transform hover:scale-105"
         >
           See All Camps
         </Link>

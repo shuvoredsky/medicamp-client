@@ -17,6 +17,7 @@ import RegisteredCamps from "../Dashboard/Participant-Dashboard/RegisteredCamps.
 import PaymentHistory from "../Dashboard/Participant-Dashboard/PaymentHistory.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
 import OrganizerProfile from "../Dashboard/OrganizerProfile.jsx";
+import ContactUs from "../Components/ContactUs/ContactUs.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
             element: <RegisteredCamps />, // Protected registered camps route
           },
         ],
+      },
+      {
+        path: "contact-us",
+        element: <ContactUs></ContactUs>,
       },
     ],
   },

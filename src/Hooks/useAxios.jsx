@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: `https://assignment-12-server-seven-plum.vercel.app`,
+  baseURL: `https://medicamp-api.onrender.com`,
 });
 
 const useAxios = () => {

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { Spin } from "antd";
 
 const UpdateCamp = () => {
   const { campId } = useParams();
@@ -18,7 +19,6 @@ const UpdateCamp = () => {
     formState: { errors },
   } = useForm();
 
-  // Fetch current camp data
   const { data: camp, isLoading } = useQuery({
     queryKey: ["campDetails", campId],
     queryFn: async () => {
@@ -28,7 +28,6 @@ const UpdateCamp = () => {
     },
   });
 
-  // Mutation for update
   const mutation = useMutation({
     mutationFn: async (updatedData) => {
       return await axiosSecure.patch(`/update-camp/${campId}`, updatedData);
@@ -57,11 +56,16 @@ const UpdateCamp = () => {
     mutation.mutate(data);
   };
 
-  if (isLoading) return <p className="text-center py-10">Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spin tip="Loading feedbacks..." size="large" />
+      </div>
+    );
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-lg mt-8">
-      <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
+      <h2 className="text-2xl font-bold mb-4 text-center text-teal-600">
         Update Camp
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -127,7 +131,7 @@ const UpdateCamp = () => {
 
         <button
           type="submit"
-          className="w-full cursor-pointer bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+          className="w-full cursor-pointer bg-teal-600 text-white p-2 rounded hover:bg-teal-700 transition"
         >
           Update Camp
         </button>

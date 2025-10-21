@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router"; // Corrected import for Link
 import useAxiosSecure from "../../Hooks/useAxiosSecure"; // Adjust path if needed
 import { Helmet } from "react-helmet-async";
+import { Spin } from "antd";
 
 const AvailableCamps = () => {
   const axiosSecure = useAxiosSecure();
@@ -41,7 +42,12 @@ const AvailableCamps = () => {
       return 0;
     });
 
-  if (isLoading) return <p className="text-center py-10">Loading camps...</p>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spin tip="Loading feedbacks..." size="large" />
+      </div>
+    );
   if (isError)
     return <p className="text-center text-red-500">Failed to load camps.</p>;
 
@@ -50,7 +56,7 @@ const AvailableCamps = () => {
       <Helmet>
         <title>Medicamp | Available Camp</title>
       </Helmet>
-      <h2 className="text-3xl font-semibold text-center text-blue-700 mb-8">
+      <h2 className="text-3xl font-semibold text-center text-teal-700 mb-8">
         Available Medical Camps
       </h2>
 
@@ -59,12 +65,12 @@ const AvailableCamps = () => {
         <input
           type="text"
           placeholder="Search by name, location, or date..."
-          className="w-full sm:w-2/3 lg:w-1/2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full sm:w-2/3 lg:w-1/2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <select
-          className="w-full sm:w-1/3 lg:w-1/4 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full sm:w-1/3 lg:w-1/4 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
@@ -74,7 +80,7 @@ const AvailableCamps = () => {
           <option value="alphabetical">Alphabetical Order</option>
         </select>
         <button
-          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="w-full sm:w-auto px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
           onClick={() => setLayoutColumns(layoutColumns === 3 ? 2 : 3)}
         >
           Switch to {layoutColumns === 3 ? "2" : "3"} Columns
@@ -98,7 +104,7 @@ const AvailableCamps = () => {
               className="w-full h-48 object-cover rounded-t-lg"
             />
             <div className="p-4 space-y-1 text-sm">
-              <h3 className="text-base font-bold text-blue-600">
+              <h3 className="text-base font-bold text-teal-600">
                 {camp.campName}
               </h3>
               <p className="text-gray-600">📍 {camp.location}</p>
@@ -115,7 +121,7 @@ const AvailableCamps = () => {
               <div className="pt-2">
                 <Link
                   to={`/camp-details/${camp._id}`}
-                  className="inline-block text-xs px-4 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                  className="inline-block text-xs px-4 py-1.5 bg-teal-600 text-white rounded hover:bg-teal-700 transition"
                 >
                   View Details
                 </Link>

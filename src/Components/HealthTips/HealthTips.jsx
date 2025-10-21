@@ -23,22 +23,27 @@ const HealthTips = () => {
   ];
 
   return (
-    <div className="py-12 bg-gray-50">
+    <div className="py-12 bg-teal-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center mb-8 text-blue-600">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-teal-700">
           Health Tips
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {tips.map((tip, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 text-center"
+              className="bg-white rounded-xl border border-teal-100 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 p-6 text-center"
             >
-              <div className="text-4xl mb-4">{tip.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              {/* Icon Circle */}
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-teal-600 text-white text-3xl">
+                {tip.icon}
+              </div>
+
+              <h3 className="text-xl font-semibold text-teal-700 mb-2">
                 {tip.title}
               </h3>
-              <p className="text-gray-600">{tip.description}</p>
+              <p className="text-gray-600 leading-relaxed">{tip.description}</p>
             </div>
           ))}
         </div>

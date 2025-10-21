@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Card, Button, Modal, Form, Input, Avatar } from "antd";
+import { Card, Button, Modal, Form, Input, Avatar, Spin } from "antd";
 import { AuthContext } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import { updateProfile } from "firebase/auth";
@@ -7,7 +7,7 @@ import { auth } from "../firebase/firebase-init";
 import { toast } from "react-toastify";
 
 const OrganizerProfile = () => {
-  const { user } = useContext(AuthContext); // Removed reload since it's not available
+  const { user } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profile, setProfile] = useState({
     name: user?.displayName || "",
@@ -18,11 +18,10 @@ const OrganizerProfile = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Sync profile state with user data
     setProfile({
       name: user?.displayName || "",
       photoURL: user?.photoURL || "",
-      contact: profile.contact || "", // Retain contact if already set
+      contact: profile.contact || "",
     });
   }, [user]);
 
@@ -32,17 +31,14 @@ const OrganizerProfile = () => {
     setError(null);
 
     try {
-      // Update Firebase Auth profile
       await updateProfile(auth.currentUser, {
         displayName: name,
         photoURL: photoURL,
       });
       toast.success("Firebase Profile Updated Successfully");
 
-      // Reload user data to reflect changes
-      await auth.currentUser.reload(); // Replace reload() with auth.currentUser.reload()
+      await auth.currentUser.reload();
 
-      // Update local profile state
       setProfile((prev) => ({ ...prev, name, photoURL, contact }));
 
       Swal.fire("Success", "Profile updated successfully", "success");
@@ -56,9 +52,12 @@ const OrganizerProfile = () => {
     }
   };
 
-  if (isLoading) {
-    return <p className="text-center py-10 text-base">Loading...</p>;
-  }
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spin tip="Loading feedbacks..." size="large" />
+      </div>
+    );
 
   if (error && error.includes("404")) {
     return (
@@ -73,9 +72,9 @@ const OrganizerProfile = () => {
   }
 
   return (
-    <div className="px-4 py-6 sm:px-6 lg:px-8">
-      <div className="max-w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto">
-        <Card className="shadow-md rounded-lg">
+    <div className="px-4 py-6 sm:px-6 lg:px-8 bg-teal-50">
+      <div className="max-w-full  sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto">
+        <Card className="shadow-md rounded-lg ">
           <div className="flex flex-col items-center gap-4 p-4 sm:flex-row sm:items-start sm:gap-6">
             <Avatar
               src={profile.photoURL || "/default-avatar.png"}
