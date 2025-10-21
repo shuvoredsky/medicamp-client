@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SuccessStory = () => {
+  const containerRef = useRef(null);
+
   const stories = [
     {
       name: "Rahim Ullah",
@@ -39,16 +45,54 @@ const SuccessStory = () => {
     },
   ];
 
+  useEffect(() => {
+    // Container-কে trigger করো
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 80%", // যখন container-এর top viewport-এর 80% এ পৌঁছাবে
+        end: "bottom 20%",
+        scrub: 1, // Smooth scroll sync (1 = 1s delay for smoothness)
+        // pin: true,  // যদি whole section sticky করতে চাও, uncomment করো
+        // pinSpacing: false,
+      },
+    });
+
+    // Timeline-এ cards গুলোকে stagger করে animate করো (fade in + slide up)
+    tl.fromTo(
+      ".story-card",
+      {
+        opacity: 0,
+        y: 50, // নিচ থেকে 50px উপরে slide up
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.2, // প্রত্যেক card-এর মধ্যে 0.2s delay
+        ease: "power2.out",
+      }
+    );
+
+    // Cleanup: ScrollTrigger গুলো kill করো unmount-এ
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
-    <div className="py-12 bg-black">
+    <div className="py-12 bg-black text-white">
       <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[#00E5FF]">
         Success Stories
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
+      <div
+        ref={containerRef} // Ref এখন properly use হচ্ছে
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4"
+      >
         {stories.map((story, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl border border-teal-100 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col overflow-hidden"
+            className="story-card bg-white rounded-xl border border-teal-100 shadow-md flex flex-col overflow-hidden opacity-0" // Initial opacity 0 for animation
           >
             <div className="h-40 bg-teal-200 flex items-center justify-center text-white text-5xl">
               👨‍⚕️
