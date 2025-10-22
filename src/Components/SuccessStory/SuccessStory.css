@@ -1,0 +1,34 @@
+body {
+  overflow-x: hidden;
+}
+
+.swipe-section {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.swipe-section .panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: white;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.swipe-section .panel:nth-child(odd) {
+  background: #0d1117;
+  color: white;
+}
+
+.swipe-section .panel h3 {
+  color: #00e5ff;
+}
